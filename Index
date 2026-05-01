@@ -1,0 +1,1643 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#0f1e35">
+<title>CarrelagePro</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#f0f2f5;min-height:100dvh}
+:root{
+  --navy:#0f1e35;--navy2:#1a3054;
+  --bg:#f0f2f5;--card:#fff;--card2:#e8ecf2;
+  --teal:#0a7c5e;--teal-l:#0d9b75;
+  --red:#b83232;--red-l:#e04444;
+  --wood:#8b5e3c;--paint:#6b3db8;
+  --text:#0f1e35;--text2:#3a527a;--text3:#6b85aa;
+  --border:#d0d8e8;--border2:#b8c4d8;
+  --sb:env(safe-area-inset-bottom,0px);
+  --st:env(safe-area-inset-top,0px);
+}
+.app{display:flex;flex-direction:column;min-height:100dvh}
+.topbar{background:var(--navy);padding:12px 16px;padding-top:calc(12px + var(--st));display:flex;align-items:center;justify-content:space-between;gap:10px;flex-shrink:0}
+.brand{display:flex;align-items:center;gap:9px}
+.bicon{width:30px;height:30px;background:var(--teal);border-radius:7px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.bicon svg{width:16px;height:16px;fill:#fff}
+.bname{font-size:15px;font-weight:700;color:#fff}
+.bsub{font-size:10px;color:rgba(255,255,255,.4)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:5px;padding:8px 14px;border-radius:8px;border:none;font-size:13px;font-weight:600;cursor:pointer;transition:all .15s;line-height:1;-webkit-appearance:none}
+.btn:active{transform:scale(.95);opacity:.85}
+.btn-p{background:var(--teal);color:#fff}
+.btn-g{background:rgba(255,255,255,.12);color:#fff;border:1px solid rgba(255,255,255,.2)}
+.btn-d{background:transparent;color:var(--red);border:1.5px solid #e8c0c0}
+.btn-d:hover{background:#fceaea}
+.btn-e{background:var(--navy2);color:#fff;border:1px solid rgba(255,255,255,.15)}
+.btn-o{background:transparent;color:var(--text2);border:1.5px solid var(--border2)}
+.btn-xs{padding:5px 10px;font-size:11px}
+.btn-full{width:100%;padding:14px;font-size:14px}
+.body{flex:1;overflow-y:auto;padding:14px 16px;padding-bottom:calc(70px + var(--sb))}
+.mnav{display:flex;background:var(--navy);border-top:1px solid rgba(255,255,255,.1);padding-bottom:var(--sb);flex-shrink:0}
+.mnb{flex:1;padding:10px 4px;border:none;background:transparent;color:rgba(255,255,255,.45);font-size:10px;font-weight:500;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:3px;transition:all .15s}
+.mnb svg{width:20px;height:20px;fill:currentColor}
+.mnb.on{color:#fff;background:rgba(255,255,255,.08)}
+.screen{display:none}.screen.on{display:block}
+/* cards */
+.card{background:var(--card);border:1.5px solid var(--border);border-radius:12px;padding:14px;margin-bottom:10px}
+.card-title{font-size:12px;font-weight:700;color:var(--text2);margin-bottom:12px;text-transform:uppercase;letter-spacing:.5px}
+.pitem{padding:13px 15px;border-radius:11px;cursor:pointer;margin-bottom:8px;border:1.5px solid var(--border);background:var(--card);display:flex;align-items:center;justify-content:space-between;transition:all .15s}
+.pitem:active{transform:scale(.98)}
+.pitem.on{background:var(--navy);border-color:var(--navy)}
+.pitem.on .pn,.pitem.on .pa{color:#fff}
+.pitem.on .pm{color:rgba(255,255,255,.45)}
+.pn{font-size:14px;font-weight:600;color:var(--text)}
+.pm{font-size:12px;color:var(--text3);margin-top:3px}
+.pa{font-size:20px;color:var(--text3)}
+/* form */
+.fg{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px}
+.field{display:flex;flex-direction:column;gap:5px}
+.field label{font-size:12px;color:var(--text2);font-weight:500}
+.field input,.field select{background:var(--card2);border:1.5px solid var(--border);border-radius:8px;padding:10px 12px;color:var(--navy);font-size:16px;width:100%;font-weight:500;-webkit-appearance:none;appearance:none}
+.field input:focus,.field select:focus{outline:none;border-color:var(--teal);background:#fff}
+.mrow{background:var(--card2);border:1.5px solid var(--border);border-radius:9px;padding:11px 13px;margin-bottom:8px}
+.mrow-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:9px}
+.mrow-lbl{font-size:13px;font-weight:600;color:var(--text2)}
+.mrow-res{font-size:13px;font-weight:600;color:var(--teal)}
+.mrow-res.neg{color:var(--red)}
+.mrow-in{display:grid;grid-template-columns:1fr 1fr auto;gap:8px;align-items:flex-end}
+.addbtn{width:100%;padding:12px;border:2px dashed var(--border2);border-radius:9px;background:transparent;color:var(--text3);font-size:13px;cursor:pointer;margin-bottom:10px;transition:all .15s;font-weight:500}
+.addbtn:active{border-color:var(--teal);color:var(--teal);background:#f0faf7}
+.pills{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px}
+.pill{padding:7px 14px;border-radius:20px;border:1.5px solid var(--border2);background:transparent;font-size:12px;font-weight:600;color:var(--text2);cursor:pointer;transition:all .15s}
+.pill.on{background:var(--navy);color:#fff;border-color:transparent}
+.ssep{border:none;border-top:1.5px solid var(--border);margin:12px 0}
+.slbl{font-size:10px;font-weight:700;color:var(--text3);letter-spacing:.8px;text-transform:uppercase;margin-bottom:8px;margin-top:14px}
+.slbl:first-child{margin-top:0}
+.stat-r{display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1.5px solid var(--border)}
+.stat-r:last-child{border-bottom:none}
+.stat-l{font-size:13px;color:var(--text3)}
+.stat-v{font-size:15px;font-weight:600;color:var(--navy)}
+.stat-u{font-size:10px;color:var(--text3);margin-left:2px}
+.hg .stat-v{color:var(--teal)}.hr .stat-v{color:var(--red)}
+.big{background:var(--navy);border-radius:12px;padding:18px;text-align:center;margin-top:12px}
+.big-l{font-size:11px;color:rgba(255,255,255,.5);margin-bottom:5px}
+.big-v{font-size:32px;font-weight:700;color:#fff;letter-spacing:-1px}
+.big-u{font-size:13px;color:rgba(255,255,255,.5);margin-left:2px}
+.badge{display:inline-block;padding:2px 8px;border-radius:20px;font-size:10px;font-weight:700}
+.b-c{background:#d0f0e8;color:var(--teal)}
+.b-p{background:#fdf0e0;color:var(--wood)}
+.b-t{background:#f0e8ff;color:var(--paint)}
+.empty{text-align:center;padding:32px 16px;color:var(--text3);font-size:13px}
+.empty strong{display:block;font-size:15px;color:var(--text2);margin-bottom:6px}
+.mbox{background:#e8f7f1;border:1.5px solid #b0dece;border-radius:8px;padding:9px 13px;font-size:12px;color:var(--teal);margin-bottom:10px}
+.wbox{background:#fceaea;border:1.5px solid #f0c0c0;border-radius:8px;padding:9px 13px;font-size:12px;color:var(--red);margin-bottom:10px}
+.bread{display:flex;align-items:center;gap:8px;margin-bottom:13px;flex-wrap:wrap}
+.back{background:var(--card2);border:1.5px solid var(--border2);border-radius:8px;padding:8px 13px;font-size:13px;font-weight:600;color:var(--text2);cursor:pointer}
+.btitle{font-size:14px;font-weight:600;color:var(--navy);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+/* module toggles */
+.mod-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:4px}
+.mod-btn{padding:14px 6px;border-radius:11px;border:2px solid var(--border2);background:transparent;cursor:pointer;text-align:center;transition:all .15s}
+.mod-btn:active{transform:scale(.95)}
+.mod-btn .ico{font-size:22px;margin-bottom:5px}
+.mod-btn .lbl{font-size:11px;font-weight:700;color:var(--text3)}
+.mod-btn.c-on{border-color:var(--teal);background:#e8f7f1}.mod-btn.c-on .lbl{color:var(--teal)}
+.mod-btn.p-on{border-color:var(--wood);background:#fdf0e0}.mod-btn.p-on .lbl{color:var(--wood)}
+.mod-btn.t-on{border-color:var(--paint);background:#f0e8ff}.mod-btn.t-on .lbl{color:var(--paint)}
+/* parquet styles */
+.style-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px}
+.scard{border:1.5px solid var(--border2);border-radius:10px;padding:11px 8px;text-align:center;cursor:pointer;transition:all .15s}
+.scard:active{transform:scale(.95)}
+.scard.on{border-color:var(--wood);background:#fdf0e0}
+.scard svg{display:block;margin:0 auto 5px}
+.scard-n{font-size:11px;font-weight:700;color:var(--text)}
+.scard.on .scard-n{color:var(--wood)}
+.scard-c{font-size:10px;color:var(--text3)}
+/* peinture */
+.paint-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:10px}
+.pgrid-btn{padding:10px 6px;border:1.5px solid var(--border2);border-radius:9px;background:transparent;font-size:12px;font-weight:600;color:var(--text2);cursor:pointer;text-align:center;transition:all .15s;line-height:1.4}
+.pgrid-btn.on{background:var(--paint);color:#fff;border-color:transparent}
+.pass-row{display:flex;gap:6px;margin-bottom:10px}
+.pass-btn{flex:1;padding:10px;border:1.5px solid var(--border2);border-radius:9px;background:transparent;font-size:13px;font-weight:700;color:var(--text2);cursor:pointer;transition:all .15s}
+.pass-btn.on{background:var(--paint);color:#fff;border-color:transparent}
+/* canvas */
+.cv-wrap{border:1.5px solid var(--border);border-radius:10px;overflow:hidden;margin-bottom:10px}
+.cv-bar{display:flex;gap:6px;padding:8px 10px;background:var(--card);border-bottom:1px solid var(--border);align-items:center;flex-wrap:wrap}
+.cv-bar span{font-size:11px;color:var(--text3);flex:1}
+/* modal */
+.modal-ov{background:rgba(10,20,40,.7);position:fixed;inset:0;display:flex;align-items:flex-end;z-index:200;backdrop-filter:blur(4px)}
+.modal-sh{background:var(--card);border-radius:18px 18px 0 0;padding:20px;padding-bottom:calc(20px + var(--sb));width:100%;max-height:88vh;overflow-y:auto}
+.modal-h{width:38px;height:4px;background:var(--border2);border-radius:2px;margin:0 auto 16px}
+.modal-t{font-size:17px;font-weight:700;color:var(--navy);margin-bottom:4px}
+.modal-s{font-size:13px;color:var(--text3);margin-bottom:16px}
+.modal-sep{border:none;border-top:1.5px solid var(--border);margin:14px 0}
+.exp-opt{display:flex;align-items:center;gap:12px;padding:13px 15px;border:1.5px solid var(--border);border-radius:11px;margin-bottom:8px;cursor:pointer;transition:all .15s}
+.exp-opt:active{background:var(--card2);transform:scale(.98)}
+.exp-ico{width:38px;height:38px;border-radius:9px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.exp-ico svg{width:20px;height:20px}
+.exp-n{font-size:13px;font-weight:700;color:var(--navy)}
+.exp-d{font-size:11px;color:var(--text3);margin-top:2px}
+.drop-z{border:2px dashed var(--border2);border-radius:11px;padding:22px 16px;text-align:center;cursor:pointer;background:var(--card2);position:relative;overflow:hidden}
+.drop-z input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%;font-size:16px}
+.drop-z:active{border-color:var(--teal);background:#f0faf7}
+.drop-ico{width:42px;height:42px;margin:0 auto 8px;background:#e8f0fe;border-radius:10px;display:flex;align-items:center;justify-content:center}
+.drop-ico svg{width:22px;height:22px;stroke:#185FA5;fill:none;stroke-width:1.8}
+.imp-ok{background:#e8f7f1;border:1.5px solid #b0dece;border-radius:10px;padding:13px 15px;display:flex;align-items:center;gap:10px;margin-top:10px}
+.imp-ok-i{width:30px;height:30px;background:var(--teal);border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.imp-ok-i svg{width:14px;height:14px;stroke:#fff;fill:none;stroke-width:2.5}
+.imp-err{background:#fceaea;border:1.5px solid #f0c0c0;border-radius:9px;padding:11px 14px;font-size:13px;color:var(--red);margin-top:10px}
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="topbar">
+    <div class="brand">
+      <div class="bicon"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="8" height="8" rx="1.5"/><rect x="13" y="3" width="8" height="8" rx="1.5"/><rect x="3" y="13" width="8" height="8" rx="1.5"/><rect x="13" y="13" width="8" height="8" rx="1.5"/></svg></div>
+      <div><div class="bname">Brico Budget</div><div class="bsub">Dimensionnement & budget de projets</div></div>
+    </div>
+    <div style="display:flex;gap:6px">
+      <a href="mailto:p.jondot@icloud.com?subject=Outils%20de%20calcul%20IZ" class="btn btn-g btn-xs" style="text-decoration:none">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+      </a>
+      <button class="btn btn-g btn-xs" onclick="openModal()">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <div class="body">
+    <div class="screen on" id="s-proj">
+      <button class="btn btn-p btn-full" style="margin-bottom:12px" onclick="newProject()">+ Nouveau projet</button>
+      <div id="proj-list"><div class="empty"><strong>Aucun projet</strong>Créez un projet ou importez un fichier JSON.</div></div>
+    </div>
+    <div class="screen" id="s-pieces">
+      <div class="bread">
+        <button class="back" onclick="goScreen('s-proj')">← Projets</button>
+        <span class="btitle" id="proj-name"></span>
+        <button class="btn btn-d btn-xs" onclick="delProject()">🗑</button>
+        <button class="btn btn-e btn-xs" onclick="openModal()">Export</button>
+      </div>
+      <button class="btn btn-p btn-full" style="margin-bottom:12px" onclick="addPiece()">+ Ajouter une pièce</button>
+      <div id="piece-list"></div>
+    </div>
+    <div class="screen" id="s-config">
+      <div class="bread">
+        <button class="back" onclick="goScreen('s-pieces')">← Pièces</button>
+        <span class="btitle" id="pc-title"></span>
+      </div>
+      <div id="config-content"></div>
+    </div>
+    <div class="screen" id="s-res">
+      <div class="bread">
+        <button class="back" onclick="goScreen('s-config')">← Config</button>
+        <span class="btitle" id="res-title"></span>
+      </div>
+      <div id="res-content"></div>
+    </div>
+    <div class="screen" id="s-bilan">
+      <div class="bread">
+        <button class="back" onclick="goScreen('s-pieces')">← Pièces</button>
+        <span class="btitle">Bilan & budget</span>
+        <button class="btn btn-e btn-xs" onclick="openModal()">Export</button>
+      </div>
+      <div id="bilan-content"></div>
+    </div>
+  </div>
+
+  <div class="mnav" id="mnav" style="display:none">
+    <button class="mnb" id="mn-pieces" onclick="goScreen('s-pieces')">
+      <svg viewBox="0 0 24 24"><rect x="3" y="3" width="8" height="8" rx="1.5"/><rect x="13" y="3" width="8" height="8" rx="1.5"/><rect x="3" y="13" width="8" height="8" rx="1.5"/><rect x="13" y="13" width="8" height="8" rx="1.5"/></svg>Pièces
+    </button>
+    <button class="mnb" id="mn-config" onclick="goScreen('s-config')" style="display:none">
+      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>Config
+    </button>
+    <button class="mnb" id="mn-res" onclick="goScreen('s-res')" style="display:none">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="4" y="3" width="16" height="18" rx="1.5"/><line x1="7" y1="9" x2="17" y2="9"/><line x1="7" y1="13" x2="17" y2="13"/><line x1="7" y1="17" x2="13" y2="17"/></svg>Résultats
+    </button>
+    <button class="mnb" id="mn-bilan" onclick="gotoBilan()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>Bilan
+    </button>
+  </div>
+</div>
+
+<!-- Modal -->
+<div class="modal-ov" id="modal" style="display:none" onclick="closeModal(event)">
+  <div class="modal-sh" onclick="event.stopPropagation()">
+    <div class="modal-h"></div>
+    <div class="modal-t">Import / Export</div>
+    <div class="modal-s" id="modal-pname"></div>
+    <div style="font-size:10px;font-weight:700;color:var(--text3);letter-spacing:.6px;text-transform:uppercase;margin-bottom:10px">Importer un projet</div>
+    <div class="drop-z">
+      <input type="file" accept=".json" onchange="handleFile(this.files[0])">
+      <div class="drop-ico"><svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg></div>
+      <div style="font-size:13px;font-weight:700;color:var(--navy);margin-bottom:3px">Choisir un fichier JSON</div>
+      <div style="font-size:11px;color:var(--text3)">Tapez ici pour parcourir vos fichiers</div>
+    </div>
+    <div id="imp-fb"></div>
+    <div class="modal-sep"></div>
+    <div id="exp-sec" style="display:none">
+      <div style="font-size:10px;font-weight:700;color:var(--text3);letter-spacing:.6px;text-transform:uppercase;margin-bottom:10px">Exporter le projet actuel</div>
+      <div class="exp-opt" onclick="exportJSON()">
+        <div class="exp-ico" style="background:#e8f0fe"><svg viewBox="0 0 24 24" fill="none" stroke="#185FA5" stroke-width="1.8"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div>
+        <div><div class="exp-n">Fichier JSON</div><div class="exp-d">Sauvegarde complète, réimportable</div></div>
+      </div>
+      <div class="exp-opt" onclick="exportCSV()">
+        <div class="exp-ico" style="background:#e8f7f1"><svg viewBox="0 0 24 24" fill="none" stroke="#0a7c5e" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="3" y1="15" x2="21" y2="15"/><line x1="9" y1="9" x2="9" y2="21"/></svg></div>
+        <div><div class="exp-n">Tableur CSV</div><div class="exp-d">Excel ou Google Sheets</div></div>
+      </div>
+      <div class="exp-opt" onclick="exportTXT()">
+        <div class="exp-ico" style="background:#f0f2f5"><svg viewBox="0 0 24 24" fill="none" stroke="#3a527a" stroke-width="1.8"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="8" y1="13" x2="16" y2="13"/></svg></div>
+        <div><div class="exp-n">Résumé texte</div><div class="exp-d">Rapport lisible à partager</div></div>
+      </div>
+    </div>
+    <button class="btn btn-o btn-full" style="margin-top:10px" onclick="closeModal()">Fermer</button>
+  </div>
+</div>
+
+<script>
+// ═══════════════════════════════════════════
+// STATE & UTILS
+// ═══════════════════════════════════════════
+let S={projects:[],cur:null,sel:null};
+const uid=()=>Math.random().toString(36).slice(2,8);
+const esc=s=>(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+const fmt=n=>(Math.round((n||0)*100)/100).toLocaleString('fr-FR',{maximumFractionDigits:2});
+const fmt1=n=>parseFloat((n||0).toFixed(1)).toLocaleString('fr-FR');
+const save=()=>{try{localStorage.setItem('cp_v2',JSON.stringify(S))}catch(e){}};
+const load=()=>{try{const d=localStorage.getItem('cp_v2');if(d)S=JSON.parse(d)}catch(e){}};
+load();
+const cur=()=>S.projects.find(p=>p.id===S.cur);
+const gpc=()=>S.sel?cur().pieces.find(p=>p.id===S.sel):null;
+const dl=(name,content,type)=>{const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([content],{type}));a.download=name;a.click();};
+
+// ═══════════════════════════════════════════
+// PARQUET DATA
+// ═══════════════════════════════════════════
+const PARQ={
+  droit:{lbl:'Droit',chute:5,svg:'<line x1="4" y1="6" x2="20" y2="6"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="18" x2="20" y2="18"/>'},
+  biais:{lbl:'Biais 45°',chute:15,svg:'<line x1="4" y1="20" x2="20" y2="4"/><line x1="4" y1="14" x2="14" y2="4"/><line x1="10" y1="20" x2="20" y2="10"/>'},
+  hongrie:{lbl:'Pt de Hongrie',chute:20,svg:'<polyline points="4,14 10,6 16,14"/><polyline points="10,20 16,12 22,20"/>'},
+  chevrons:{lbl:'Chevrons',chute:15,svg:'<polyline points="4,18 12,6 20,18"/>'},
+  cabochon:{lbl:'Cabochon',chute:25,svg:'<rect x="4" y="4" width="7" height="7" rx="1"/><rect x="13" y="4" width="7" height="7" rx="1"/><rect x="4" y="13" width="7" height="7" rx="1"/><rect x="13" y="13" width="7" height="7" rx="1"/>'}
+};
+
+// ═══════════════════════════════════════════
+// PEINTURE DATA
+// ═══════════════════════════════════════════
+const PAINT={
+  mat:{lbl:'Mate',rdt:12},satin:{lbl:'Satinée',rdt:10},
+  brillant:{lbl:'Brillante',rdt:8},glycero:{lbl:'Glycéro',rdt:10},
+  primaire:{lbl:'Primaire',rdt:8},plafond:{lbl:'Plafond',rdt:10}
+};
+
+// ═══════════════════════════════════════════
+// PIECE MODEL
+// ═══════════════════════════════════════════
+function newPiece(n){
+  return{
+    id:uid(),name:n,
+    // modules
+    hasC:false,hasP:false,hasT:false,
+    // carrelage
+    murs:[],ouv:[],cL:30,cH:30,carreauEp:8,
+    paqMode:'s',paqS:1.44,paqN:16,lameLong:120,lameLarg:19,
+    chute:10,chuteM:'p',chuteP:'s',
+    prixC:25,prixK:18,sacKg:25,
+    jointEp:null,sacJointKg:5,prixJ:8,
+    // parquet
+    parqStyle:'droit',zones:[],
+    lames:'m2',lamesM2:2.5,lamesNb:8,
+    souscouche:true,sacSC:7,prixPar:35,prixSC:8,
+    // peinture
+    pmurs:[],pouv:[],
+    hMur:2.5,plafond:false,lPlaf:0,lPlaf2:0,
+    paintType:'mat',passes:2,rdt:12,volPot:10,prixPot:25
+  };
+}
+
+// ═══════════════════════════════════════════
+// CALCULATIONS
+// ═══════════════════════════════════════════
+function surfCarrelage(pc){
+  return Math.max(0,
+    (pc.murs||[]).reduce((a,m)=>a+(+m.l||0)*(+m.h||0),0)
+    -(pc.ouv||[]).reduce((a,o)=>a+(+o.l||0)*(+o.h||0),0));
+}
+function calcColle(pc,s){
+  const gf=Math.min(+pc.cL||30,+pc.cH||30)>=60;
+  const kgM2=gf?3.5:1.8;const kgT=s*kgM2;const sk=+pc.sacKg||25;
+  return{gf,kgM2,kgT,sk,nSacs:Math.ceil(kgT/sk)};
+}
+function jointRecoEp(minS){return minS<15?2:minS<60?3:5;}
+function calcJoint(pc,s){
+  const cL=+pc.cL||30,cH=+pc.cH||30,minS=Math.min(cL,cH);
+  const ep=pc.jointEp!=null?(+pc.jointEp):jointRecoEp(minS);
+  const prof=+pc.carreauEp||8;
+  const kgM2=((cL+cH)/(cL*cH))*(ep/10)*(prof/10)*1.6;
+  const kgT=s*kgM2,sj=+pc.sacJointKg||5;
+  return{ep,kgM2,kgT,sj,nSacs:Math.ceil(kgT/sj),auto:pc.jointEp==null};
+}
+function calcCarrelage(pc){
+  const s=surfCarrelage(pc),sc=s*(1+pc.chute/100);
+  const cA=(+pc.cL||30)*(+pc.cH||30)/10000;
+  const minS=Math.min(+pc.cL||30,+pc.cH||30);
+  const paq=pc.paqMode==='s'?Math.ceil(sc/(+pc.paqS||1)):Math.ceil(sc/((+pc.paqN||1)*cA));
+  return{s,sc,paq,cA,minS,colle:calcColle(pc,s),joint:calcJoint(pc,s)};
+}
+function surfParquet(pc){
+  let s=0;
+  (pc.zones||[]).forEach(z=>{
+    if(z.mode==='rect')s+=(+z.l||0)*(+z.w||0);
+    else if(z.pts&&z.pts.length>2){
+      const scale=z.scale||window._pScale||0.05;
+      const pxArea=Math.abs(z.pts.reduce((a,p,i,ar)=>{const n=ar[(i+1)%ar.length];return a+(p[0]*n[1]-n[0]*p[1]);},0))/2;
+      s+=pxArea*scale*scale; // convert px² to m²
+    }
+  });
+  return s;
+}
+function calcParquet(pc){
+  const s=surfParquet(pc);
+  const st=PARQ[pc.parqStyle]||PARQ.droit;
+  const surfAchat=s*(1+st.chute/100);
+  let paq=0;
+  if(pc.lames==='m2')paq=Math.ceil(surfAchat/(+pc.lamesM2||2.5));
+  else{const sL=(+pc.lameLong||120)*(+pc.lameLarg||19)/10000;paq=Math.ceil(surfAchat/(sL*(+pc.lamesNb||8)));}
+  const sacsSC=pc.souscouche?Math.ceil(s/(+pc.sacSC||7)):0;
+  return{s,chute:st.chute,surfAchat,paq,sacsSC,st};
+}
+function surfPlafond(pc){
+  const mode=pc.plafondMode||'rect';
+  if(mode==='parquet') return surfParquet(pc);
+  if(mode==='poly'){
+    return (pc.plafZones||[]).reduce((a,z)=>{
+      if(z.mode==='rect') return a+(+z.l||0)*(+z.w||0);
+      if(z.pts&&z.pts.length>2){
+        const sc=z.scale||0.05;
+        return a+Math.abs(z.pts.reduce((b,p,i,ar)=>{const n=ar[(i+1)%ar.length];return b+(p[0]*n[1]-n[0]*p[1]);},0))/2*sc*sc;
+      }
+      return a;
+    },0);
+  }
+  return (+(pc.lPlaf)||0)*(+(pc.lPlaf2)||0);
+}
+function surfPeinture(pc){
+  let s=0;
+  const hasMurs = pc.paintMurs || (!pc.paintMurs && !pc.paintPlafond);
+  if(hasMurs){
+    s += (pc.pmurs||[]).reduce((a,m)=>a+(+m.l||0)*(+pc.hMur||2.5),0)
+       - (pc.pouv||[]).reduce((a,o)=>a+(+o.l||0)*(+o.h||0),0);
+  }
+  if(pc.paintPlafond) s+=surfPlafond(pc);
+  return Math.max(0,s);
+}
+function calcPeinture(pc){
+  const s=surfPeinture(pc);
+  const type=PAINT[pc.paintType]||PAINT.mat;
+  const rdt=+pc.rdt||type.rdt;const passes=+pc.passes||2;
+  const vol=s*passes/rdt;const volPot=+pc.volPot||10;
+  return{s,rdt,passes,vol,volPot,nPots:Math.ceil(vol/volPot),type};
+}
+function budgetPiece(pc){
+  let b=0;
+  if(pc.hasC){const r=calcCarrelage(pc);b+=r.sc*(+pc.prixC||25)+r.colle.nSacs*(+pc.prixK||18)+r.joint.nSacs*(+pc.prixJ||8);}
+  if(pc.hasP){const r=calcParquet(pc);b+=r.surfAchat*(+pc.prixPar||35)+(pc.souscouche?r.sacsSC*(+pc.prixSC||8):0);}
+  if(pc.hasT){const r=calcPeinture(pc);b+=r.nPots*(+pc.prixPot||25);}
+  return b;
+}
+
+// ═══════════════════════════════════════════
+// NAVIGATION
+// ═══════════════════════════════════════════
+function goScreen(id){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('on'));
+  document.getElementById(id).classList.add('on');
+  window.scrollTo(0,0);
+  const has=!!S.cur;
+  document.getElementById('mnav').style.display=has?'flex':'none';
+  const hasSel=!!S.sel;
+  document.getElementById('mn-config').style.display=hasSel?'flex':'none';
+  document.getElementById('mn-res').style.display=hasSel?'flex':'none';
+  document.querySelectorAll('.mnb').forEach(b=>b.classList.remove('on'));
+  const map={'s-pieces':'mn-pieces','s-config':'mn-config','s-res':'mn-res','s-bilan':'mn-bilan'};
+  if(map[id])document.getElementById(map[id]).classList.add('on');
+}
+
+// ═══════════════════════════════════════════
+// PROJECTS
+// ═══════════════════════════════════════════
+function newProject(){
+  const n=prompt('Nom du projet :');if(!n||!n.trim())return;
+  const p={id:uid(),name:n.trim(),pieces:[]};
+  S.projects.push(p);save();openProject(p.id);
+}
+function openProject(id){
+  S.cur=id;S.sel=null;save();
+  renderProjList();renderPieceList();
+  document.getElementById('proj-name').textContent=cur().name;
+  goScreen('s-pieces');
+}
+function delProject(){
+  const p=cur();if(!p)return;
+  if(!confirm('Supprimer "'+p.name+'" et toutes ses pièces ?'))return;
+  S.projects=S.projects.filter(x=>x.id!==p.id);S.cur=null;S.sel=null;
+  save();renderProjList();goScreen('s-proj');
+}
+function renderProjList(){
+  const el=document.getElementById('proj-list');
+  if(!S.projects.length){el.innerHTML='<div class="empty"><strong>Aucun projet</strong>Créez un projet ou importez un JSON.</div>';return;}
+  el.innerHTML=S.projects.map(p=>{
+    const tB=p.pieces.reduce((a,pc)=>a+budgetPiece(pc),0);
+    return`<div class="pitem${S.cur===p.id?' on':''}" onclick="openProject('${p.id}')">
+      <div><div class="pn">${esc(p.name)}</div><div class="pm">${p.pieces.length} pièce(s) · ${fmt(tB)} €</div></div>
+      <span class="pa">›</span>
+    </div>`;
+  }).join('');
+}
+renderProjList();
+
+// ═══════════════════════════════════════════
+// PIECES LIST
+// ═══════════════════════════════════════════
+function addPiece(){
+  const n=prompt('Nom de la pièce (ex: Salle de bain) :');if(!n||!n.trim())return;
+  const p=cur();const pc=newPiece(n.trim());p.pieces.push(pc);
+  S.sel=pc.id;save();renderPieceList();openPiece(pc.id);
+}
+function renderPieceList(){
+  const p=cur();if(!p)return;
+  document.getElementById('proj-name').textContent=p.name;
+  const el=document.getElementById('piece-list');
+  if(!p.pieces.length){el.innerHTML='<div class="empty"><strong>Aucune pièce</strong>Ajoutez votre première pièce.</div>';return;}
+  el.innerHTML=p.pieces.map(pc=>{
+    const b=budgetPiece(pc);
+    const badges=[
+      pc.hasC?'<span class="badge b-c">Carrelage</span>':'',
+      pc.hasP?'<span class="badge b-p">Parquet</span>':'',
+      pc.hasT?'<span class="badge b-t">Peinture</span>':''
+    ].filter(Boolean).join(' ');
+    return`<div class="pitem" onclick="openPiece('${pc.id}')">
+      <div>
+        <div class="pn">${esc(pc.name)} ${badges}</div>
+        <div class="pm">${fmt(b)} €</div>
+      </div>
+      <div style="display:flex;align-items:center;gap:8px">
+        <button class="btn btn-d btn-xs" onclick="event.stopPropagation();delPiece('${pc.id}')">✕</button>
+        <span class="pa">›</span>
+      </div>
+    </div>`;
+  }).join('');
+}
+function openPiece(id){
+  S.sel=id;save();
+  const pc=gpc();
+  document.getElementById('pc-title').textContent=pc.name;
+  document.getElementById('res-title').textContent=pc.name;
+  renderConfig();renderRes();goScreen('s-config');
+}
+function delPiece(id){
+  if(!confirm('Supprimer cette pièce ?'))return;
+  const p=cur();p.pieces=p.pieces.filter(pc=>pc.id!==id);
+  if(S.sel===id)S.sel=null;save();renderPieceList();goScreen('s-pieces');
+}
+
+// ═══════════════════════════════════════════
+// CONFIG — multi-module
+// ═══════════════════════════════════════════
+function renderConfig(){
+  const pc=gpc();if(!pc){document.getElementById('config-content').innerHTML='';return;}
+  const el=document.getElementById('config-content');
+  let html='';
+
+  // Module toggles
+  html+=`<div class="card">
+    <div class="card-title">Modules de cette pièce</div>
+    <div class="mod-grid">
+      <button class="mod-btn${pc.hasC?' c-on':''}" onclick="toggleMod('hasC')">
+        <div class="ico"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="${pc.hasC?'var(--teal)':'var(--text3)'}" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3" y="3" width="8" height="8" rx=".5"/><rect x="13" y="3" width="8" height="8" rx=".5"/>
+          <rect x="3" y="13" width="8" height="8" rx=".5"/><rect x="13" y="13" width="8" height="8" rx=".5"/>
+          <line x1="7" y1="3" x2="7" y2="11"/><line x1="3" y1="7" x2="11" y2="7"/>
+          <line x1="17" y1="3" x2="17" y2="11"/><line x1="13" y1="7" x2="21" y2="7"/>
+          <line x1="7" y1="13" x2="7" y2="21"/><line x1="3" y1="17" x2="11" y2="17"/>
+          <line x1="17" y1="13" x2="17" y2="21"/><line x1="13" y1="17" x2="21" y2="17"/>
+        </svg></div>
+        <div class="lbl">${pc.hasC?'✓ ':''}Carrelage</div>
+      </button>
+      <button class="mod-btn${pc.hasP?' p-on':''}" onclick="toggleMod('hasP')">
+        <div class="ico"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="${pc.hasP?'var(--wood)':'var(--text3)'}" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="2" y="7" width="20" height="3" rx=".5"/>
+          <rect x="2" y="12" width="20" height="3" rx=".5"/>
+          <rect x="2" y="17" width="20" height="3" rx=".5"/>
+          <line x1="7" y1="7" x2="7" y2="10"/><line x1="14" y1="12" x2="14" y2="15"/><line x1="9" y1="17" x2="9" y2="20"/>
+        </svg></div>
+        <div class="lbl">${pc.hasP?'✓ ':''}Parquet</div>
+      </button>
+      <button class="mod-btn${pc.hasT?' t-on':''}" onclick="toggleMod('hasT')">
+        <div class="ico"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="${pc.hasT?'var(--paint)':'var(--text3)'}" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M19.5 4.5l-15 15"/>
+          <path d="M3 17l1 4 4-1"/>
+          <path d="M14 4l6 6"/>
+          <circle cx="19" cy="19" r="2.5" fill="${pc.hasT?'rgba(107,61,184,.15)':'none'}"/>
+          <path d="M17.5 19a1.5 1.5 0 003 0c0-.83-.67-1.5-1.5-2.5-.83 1-1.5 1.67-1.5 2.5z"/>
+        </svg></div>
+        <div class="lbl">${pc.hasT?'✓ ':''}Peinture</div>
+      </button>
+    </div>
+  </div>`;
+
+  if(!pc.hasC&&!pc.hasP&&!pc.hasT){
+    html+='<div class="empty">Activez au moins un module ci-dessus.</div>';
+    el.innerHTML=html;return;
+  }
+
+  // ── CARRELAGE ──
+  if(pc.hasC){
+    const r=calcCarrelage(pc);
+    const mH=(pc.murs||[]).map((m,i)=>`<div class="mrow">
+      <div class="mrow-top"><span class="mrow-lbl">Mur ${i+1}</span><span class="mrow-res">${fmt((+m.l||0)*(+m.h||0))} m²</span></div>
+      <div class="mrow-in">
+        <div class="field"><label>Largeur (m)</label><input type="number" step="0.01" inputmode="decimal" value="${m.l}" onchange="updM(${i},'l',this.value)"></div>
+        <div class="field"><label>Hauteur (m)</label><input type="number" step="0.01" inputmode="decimal" value="${m.h}" onchange="updM(${i},'h',this.value)"></div>
+        <button class="btn btn-d btn-xs" onclick="rmM(${i})">✕</button>
+      </div></div>`).join('');
+    const oH=(pc.ouv||[]).map((o,i)=>`<div class="mrow">
+      <div class="mrow-top"><span class="mrow-lbl">${esc(o.nom)||'Ouverture '+(i+1)}</span><span class="mrow-res neg">−${fmt((+o.l||0)*(+o.h||0))} m²</span></div>
+      <div class="mrow-in">
+        <div class="field"><label>L (m)</label><input type="number" step="0.01" inputmode="decimal" value="${o.l}" onchange="updO(${i},'l',this.value)"></div>
+        <div class="field"><label>H (m)</label><input type="number" step="0.01" inputmode="decimal" value="${o.h}" onchange="updO(${i},'h',this.value)"></div>
+        <button class="btn btn-d btn-xs" onclick="rmO(${i})">✕</button>
+      </div>
+      <div class="field" style="margin-top:8px"><label>Nom</label><input type="text" value="${esc(o.nom||'')}" onchange="updO(${i},'nom',this.value)"></div>
+    </div>`).join('');
+    const brut=(pc.murs||[]).reduce((a,m)=>a+(+m.l||0)*(+m.h||0),0);
+    const ded=(pc.ouv||[]).reduce((a,o)=>a+(+o.l||0)*(+o.h||0),0);
+    html+=`<div class="card" style="border-top:3px solid var(--teal)">
+      <div class="card-title" style="color:var(--teal)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="8" height="8" rx=".5"/><rect x="13" y="3" width="8" height="8" rx=".5"/><rect x="3" y="13" width="8" height="8" rx=".5"/><rect x="13" y="13" width="8" height="8" rx=".5"/></svg> Carrelage — surfaces murales</div>
+      ${mH||'<div style="font-size:13px;color:var(--text3);margin-bottom:8px">Aucun mur.</div>'}
+      <button class="addbtn" onclick="addM()">+ Ajouter un mur</button>
+      <div class="slbl">Ouvertures à déduire</div>
+      ${oH||'<div style="font-size:13px;color:var(--text3);margin-bottom:8px">Aucune.</div>'}
+      <button class="addbtn" onclick="addO()">+ Porte / fenêtre</button>
+      ${brut>0?`<div class="ssep"></div>
+      <div class="stat-r"><span class="stat-l">Brute</span><span class="stat-v">${fmt(brut)}<span class="stat-u">m²</span></span></div>
+      ${ded>0?`<div class="stat-r"><span class="stat-l">Déductions</span><span class="stat-v" style="color:var(--red)">−${fmt(ded)}<span class="stat-u">m²</span></span></div>`:''}
+      <div class="stat-r hg"><span class="stat-l">Nette</span><span class="stat-v">${fmt(r.s)}<span class="stat-u">m²</span></span></div>`:''}
+    </div>
+    <div class="card">
+      <div class="card-title">Carrelage — paramètres</div>
+      <div class="slbl" style="margin-top:0">Dimensions carreau</div>
+      <div class="fg">
+        <div class="field"><label>Largeur (cm)</label><input type="number" step="1" inputmode="numeric" value="${pc.cL}" onchange="setF('cL',+this.value)"></div>
+        <div class="field"><label>Hauteur (cm)</label><input type="number" step="1" inputmode="numeric" value="${pc.cH}" onchange="setF('cH',+this.value)"></div>
+      </div>
+      ${r.minS>=60?`<div class="wbox">Grand format ≥60 cm — encollage double face (3,5 kg/m²).</div>`:`<div class="mbox">Format standard — encollage simple face (1,8 kg/m²).</div>`}
+      <div class="slbl">Conditionnement paquet</div>
+      <div class="pills">
+        <button class="pill${pc.paqMode==='s'?' on':''}" onclick="setF('paqMode','s')">Surface / paquet</button>
+        <button class="pill${pc.paqMode==='n'?' on':''}" onclick="setF('paqMode','n')">Nb / paquet</button>
+      </div>
+      ${pc.paqMode==='s'?`<div class="fg"><div class="field"><label>m² par paquet</label><input type="number" step="0.01" inputmode="decimal" value="${pc.paqS}" onchange="setF('paqS',+this.value)"></div></div>`:''}
+      ${pc.paqMode==='n'?`<div class="fg"><div class="field"><label>Carreaux / paquet</label><input type="number" step="1" inputmode="numeric" value="${pc.paqN}" onchange="setF('paqN',+this.value)"></div><div class="field"><label>= Surface</label><div style="padding:10px 0;font-size:16px;font-weight:600;color:var(--navy)">${fmt(pc.paqN*r.cA)} m²</div></div></div>`:''}
+      <div class="slbl">Marge de chute</div>
+      <div class="pills">
+        <button class="pill${pc.chuteM==='p'?' on':''}" onclick="setF('chuteM','p')">Prédéfini</button>
+        <button class="pill${pc.chuteM==='m'?' on':''}" onclick="setF('chuteM','m')">Manuel</button>
+      </div>
+      ${pc.chuteM==='p'?`<div class="pills">
+        <button class="pill${pc.chuteP==='s'?' on':''}" onclick="setPreset('s')">Simple +10%</button>
+        <button class="pill${pc.chuteP==='m'?' on':''}" onclick="setPreset('m')">Moyen +15%</button>
+        <button class="pill${pc.chuteP==='c'?' on':''}" onclick="setPreset('c')">Complexe +20%</button>
+      </div>`:''}
+      ${pc.chuteM==='m'?`<div class="fg"><div class="field"><label>Pourcentage (%)</label><input type="number" step="1" inputmode="numeric" min="0" max="50" value="${pc.chute}" onchange="setF('chute',+this.value)"></div></div>`:''}
+      <div class="slbl">Joint</div>
+      <div class="fg">
+        <div class="field"><label>Épaisseur joint (mm)</label><input type="number" step="0.5" inputmode="decimal" min="1" max="20" value="${r.joint.ep}" onchange="setF('jointEp',+this.value)"></div>
+        <div class="field"><label>Épaisseur carreau (mm)</label><input type="number" step="1" inputmode="numeric" value="${pc.carreauEp||8}" onchange="setF('carreauEp',+this.value)"></div>
+      </div>
+      ${r.joint.auto?`<div class="mbox" style="margin-top:-4px">Épaisseur auto : ${r.joint.ep} mm</div>`:''}
+      <button style="background:transparent;border:none;color:var(--teal);font-size:12px;cursor:pointer;padding:0;margin-bottom:10px" onclick="setF('jointEp',null)">↺ Remettre auto</button>
+      <div class="fg">
+        <div class="field"><label>Sac colle</label><select onchange="setF('sacKg',+this.value)">
+          <option value="5" ${pc.sacKg==5?'selected':''}>5 kg</option>
+          <option value="15" ${pc.sacKg==15?'selected':''}>15 kg</option>
+          <option value="25" ${(!pc.sacKg||pc.sacKg==25)?'selected':''}>25 kg</option>
+        </select></div>
+        <div class="field"><label>Sac joint</label><select onchange="setF('sacJointKg',+this.value)">
+          <option value="2" ${pc.sacJointKg==2?'selected':''}>2 kg</option>
+          <option value="5" ${(!pc.sacJointKg||pc.sacJointKg==5)?'selected':''}>5 kg</option>
+          <option value="10" ${pc.sacJointKg==10?'selected':''}>10 kg</option>
+        </select></div>
+      </div>
+      <div class="slbl">Prix</div>
+      <div class="fg">
+        <div class="field"><label>Carrelage (€/m²)</label><input type="number" step="0.5" inputmode="decimal" value="${pc.prixC}" onchange="setF('prixC',+this.value)"></div>
+        <div class="field"><label>Colle (€/sac)</label><input type="number" step="0.5" inputmode="decimal" value="${pc.prixK}" onchange="setF('prixK',+this.value)"></div>
+      </div>
+      <div class="fg">
+        <div class="field"><label>Joint (€/sac)</label><input type="number" step="0.5" inputmode="decimal" value="${pc.prixJ||8}" onchange="setF('prixJ',+this.value)"></div>
+      </div>
+    </div>`;
+  }
+
+  // ── PARQUET ──
+  if(pc.hasP){
+    const rp=calcParquet(pc);
+    const stylesH=Object.entries(PARQ).map(([k,v])=>`
+      <div class="scard${pc.parqStyle===k?' on':''}" onclick="setF('parqStyle','${k}')">
+        <svg width="36" height="26" viewBox="0 0 24 24" fill="none" stroke="${pc.parqStyle===k?'#8b5e3c':'#6b85aa'}" stroke-width="1.8">${v.svg}</svg>
+        <div class="scard-n">${v.lbl}</div>
+        <div class="scard-c">+${v.chute}%</div>
+      </div>`).join('');
+    const zonesH=(pc.zones||[]).map((z,i)=>{
+      // Rectangle zone
+      if(z.mode==='rect') return`<div class="mrow">
+        <div class="mrow-top"><span class="mrow-lbl">${esc(z.nom||'Zone '+(i+1))}</span><span class="mrow-res">${fmt((+z.l||0)*(+z.w||0))} m²</span></div>
+        <div class="mrow-in">
+          <div class="field"><label>Long. (m)</label><input type="number" step="0.01" inputmode="decimal" value="${z.l}" onchange="updZ(${i},'l',this.value)"></div>
+          <div class="field"><label>Larg. (m)</label><input type="number" step="0.01" inputmode="decimal" value="${z.w}" onchange="updZ(${i},'w',this.value)"></div>
+          <button class="btn btn-d btn-xs" onclick="rmZ(${i})">✕</button>
+        </div></div>`;
+      // Polygon zone — closed with mini canvas
+      const zscale=z.scale||0.05;
+      const sp=z.pts&&z.pts.length>2?Math.abs(z.pts.reduce((a,p,i2,ar)=>{const n=ar[(i2+1)%ar.length];return a+(p[0]*n[1]-n[0]*p[1]);},0))/2*zscale*zscale:0;
+      if(z.closed&&!z.drawing) return`<div class="mrow">
+        <div class="mrow-top"><span class="mrow-lbl">${esc(z.nom||'Zone '+(i+1))}</span><span class="mrow-res">${fmt(sp)} m²</span></div>
+        <canvas id="mini-poly-${i}" width="240" height="120" style="display:block;width:100%;border-radius:8px;border:1px solid var(--border);margin-bottom:8px;background:#f8f9fb"></canvas>
+        <div style="display:flex;gap:8px">
+          <button class="btn btn-o btn-xs" onclick="editPoly(${i})" style="color:var(--text2)">✏️ Retracer</button>
+          <button class="btn btn-d btn-xs" onclick="rmZ(${i})">✕</button>
+        </div></div>`;
+      // Polygon zone — still drawing (canvas will be appended separately)
+      return`<div class="mrow">
+        <div class="mrow-top"><span class="mrow-lbl">${esc(z.nom||'Zone '+(i+1))} — en cours</span><span class="mrow-res">${fmt(sp)} m²</span></div>
+      </div>`;
+    }).join('');
+    html+=`<div class="card" style="border-top:3px solid var(--wood)">
+      <div class="card-title" style="color:var(--wood)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--wood)" stroke-width="2" stroke-linecap="round"><rect x="2" y="7" width="20" height="3" rx=".5"/><rect x="2" y="12" width="20" height="3" rx=".5"/><rect x="2" y="17" width="20" height="3" rx=".5"/></svg> Parquet — style de pose</div>
+      <div class="style-grid">${stylesH}</div>
+    </div>
+    <div class="card">
+      <div class="card-title">Parquet — zones (sol)</div>
+      ${zonesH||'<div style="font-size:13px;color:var(--text3);margin-bottom:8px">Aucune zone.</div>'}
+      <button class="addbtn" onclick="addZ('rect')">+ Zone rectangle</button>
+      <button class="addbtn" style="margin-top:-6px" onclick="addZ('poly')">+ Zone polygone (tracé libre)</button>
+      <div id="poly-canvas-wrap"></div>
+      ${rp.s>0?`<div class="ssep"></div>
+      <div class="stat-r hg"><span class="stat-l">Surface nette</span><span class="stat-v">${fmt(rp.s)}<span class="stat-u">m²</span></span></div>
+      <div class="stat-r"><span class="stat-l">Avec chute (${rp.chute}%)</span><span class="stat-v">${fmt(rp.surfAchat)}<span class="stat-u">m²</span></span></div>`:''}
+    </div>
+    <div class="card">
+      <div class="card-title">Parquet — conditionnement & prix</div>
+      <div class="pills">
+        <button class="pill${pc.lames==='m2'?' on':''}" onclick="setF('lames','m2')">m² / paquet</button>
+        <button class="pill${pc.lames==='nb'?' on':''}" onclick="setF('lames','nb')">Lames / paquet</button>
+      </div>
+      ${pc.lames==='m2'?`<div class="fg"><div class="field"><label>m² par paquet</label><input type="number" step="0.1" inputmode="decimal" value="${pc.lamesM2||2.5}" onchange="setF('lamesM2',+this.value)"></div></div>`:''}
+      ${pc.lames==='nb'?`<div class="fg">
+        <div class="field"><label>Lames / paquet</label><input type="number" step="1" inputmode="numeric" value="${pc.lamesNb||8}" onchange="setF('lamesNb',+this.value)"></div>
+        <div class="field"><label>Long. lame (cm)</label><input type="number" step="1" inputmode="numeric" value="${pc.lameLong||120}" onchange="setF('lameLong',+this.value)"></div>
+        <div class="field"><label>Larg. lame (cm)</label><input type="number" step="1" inputmode="numeric" value="${pc.lameLarg||19}" onchange="setF('lameLarg',+this.value)"></div>
+      </div>`:''}
+      <div class="slbl">Sous-couche</div>
+      <div class="pills">
+        <button class="pill${pc.souscouche?' on':''}" onclick="setF('souscouche',true)">Oui</button>
+        <button class="pill${!pc.souscouche?' on':''}" onclick="setF('souscouche',false)">Non</button>
+      </div>
+      ${pc.souscouche?`<div class="fg"><div class="field"><label>m² / rouleau</label><input type="number" step="1" inputmode="numeric" value="${pc.sacSC||7}" onchange="setF('sacSC',+this.value)"></div></div>`:''}
+      <div class="fg">
+        <div class="field"><label>Parquet (€/m²)</label><input type="number" step="0.5" inputmode="decimal" value="${pc.prixPar||35}" onchange="setF('prixPar',+this.value)"></div>
+        ${pc.souscouche?`<div class="field"><label>Sous-couche (€/rouleau)</label><input type="number" step="0.5" inputmode="decimal" value="${pc.prixSC||8}" onchange="setF('prixSC',+this.value)"></div>`:'<div></div>'}
+      </div>
+    </div>`;
+  }
+
+  // ── PEINTURE ──
+  if(pc.hasT){
+    const rt=calcPeinture(pc);
+    const typesH=Object.entries(PAINT).map(([k,v])=>`
+      <button class="pgrid-btn${pc.paintType===k?' on':''}" onclick="setF('paintType','${k}')">${v.lbl}<br><span style="font-weight:400;font-size:10px">${v.rdt} m²/L</span></button>`).join('');
+    const pmH=(pc.pmurs||[]).map((m,i)=>`<div class="mrow">
+      <div class="mrow-top"><span class="mrow-lbl">Mur ${i+1}</span><span class="mrow-res">${fmt((+m.l||0)*(+pc.hMur||2.5))} m²</span></div>
+      <div class="mrow-in">
+        <div class="field"><label>Largeur (m)</label><input type="number" step="0.01" inputmode="decimal" value="${m.l}" onchange="updPM(${i},'l',this.value)"></div>
+        <button class="btn btn-d btn-xs" onclick="rmPM(${i})" style="align-self:flex-end">✕</button>
+      </div></div>`).join('');
+    const poH=(pc.pouv||[]).map((o,i)=>`<div class="mrow">
+      <div class="mrow-top"><span class="mrow-lbl">${esc(o.nom)||'Ouverture '+(i+1)}</span><span class="mrow-res neg">−${fmt((+o.l||0)*(+o.h||0))} m²</span></div>
+      <div class="mrow-in">
+        <div class="field"><label>L (m)</label><input type="number" step="0.01" inputmode="decimal" value="${o.l}" onchange="updPO(${i},'l',this.value)"></div>
+        <div class="field"><label>H (m)</label><input type="number" step="0.01" inputmode="decimal" value="${o.h}" onchange="updPO(${i},'h',this.value)"></div>
+        <button class="btn btn-d btn-xs" onclick="rmPO(${i})">✕</button>
+      </div></div>`).join('');
+    html+=`<div class="card" style="border-top:3px solid var(--paint)">
+      <div class="card-title" style="color:var(--paint)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--paint)" stroke-width="2" stroke-linecap="round"><path d="M18.5 3.5l2 2-14 14-3 1 1-3z"/><path d="M15 7l2 2"/></svg> Peinture — type</div>
+      <div class="paint-grid">${typesH}</div>
+      <div class="fg"><div class="field"><label>Rendement réel (m²/L)</label><input type="number" step="0.5" inputmode="decimal" value="${pc.rdt||(PAINT[pc.paintType]||PAINT.mat).rdt}" onchange="setF('rdt',+this.value)"></div></div>
+      <div class="slbl">Nombre de passes</div>
+      <div class="pass-row">
+        <button class="pass-btn${(+pc.passes||2)===1?' on':''}" onclick="setF('passes',1)">1 passe</button>
+        <button class="pass-btn${(+pc.passes||2)===2?' on':''}" onclick="setF('passes',2)">2 passes</button>
+        <button class="pass-btn${(+pc.passes||2)===3?' on':''}" onclick="setF('passes',3)">3 passes</button>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">Peinture — que voulez-vous peindre ?</div>
+      <div class="pills" style="margin-bottom:14px">
+        <button class="pill${pc.paintMurs&&!pc.paintPlafond?' on':''}" onclick="setF('paintMurs',true);setF('paintPlafond',false)">Murs uniquement</button>
+        <button class="pill${!pc.paintMurs&&pc.paintPlafond?' on':''}" onclick="setF('paintMurs',false);setF('paintPlafond',true)">Plafond uniquement</button>
+        <button class="pill${pc.paintMurs&&pc.paintPlafond?' on':''}" onclick="setF('paintMurs',true);setF('paintPlafond',true)">Murs + Plafond</button>
+      </div>
+      ${(pc.paintMurs||(!pc.paintMurs&&!pc.paintPlafond))?`
+      <div class="slbl" style="margin-top:0">Hauteur sous plafond</div>
+      <div class="fg" style="margin-bottom:8px"><div class="field"><label>Hauteur (m)</label><input type="number" step="0.05" inputmode="decimal" value="${pc.hMur||2.5}" onchange="setF('hMur',+this.value)"></div></div>
+      <div class="slbl">Murs à peindre</div>
+      ${pmH||'<div style="font-size:13px;color:var(--text3);margin-bottom:8px">Aucun mur saisi.</div>'}
+      <button class="addbtn" onclick="addPM()">+ Ajouter un mur</button>
+      <div class="slbl">Ouvertures à déduire (portes, fenêtres)</div>
+      ${poH||'<div style="font-size:13px;color:var(--text3);margin-bottom:8px">Aucune.</div>'}
+      <button class="addbtn" onclick="addPO()">+ Porte / fenêtre</button>`:''}
+      ${pc.paintPlafond?`
+      <div class="slbl" style="margin-top:${pc.paintMurs?'8px':'0'}">Surface du plafond</div>
+      <div class="pills" style="margin-bottom:10px">
+        <button class="pill${(pc.plafondMode||'rect')==='rect'?' on':''}" onclick="setF('plafondMode','rect')">Rectangle</button>
+        <button class="pill${pc.plafondMode==='poly'?' on':''}" onclick="setF('plafondMode','poly')">Tracé libre</button>
+        ${pc.hasP&&(pc.zones||[]).length?`<button class="pill${pc.plafondMode==='parquet'?' on':''}" onclick="setF('plafondMode','parquet')">= Surface parquet</button>`:''}
+      </div>
+      ${(pc.plafondMode||'rect')==='rect'?`
+      <div class="fg">
+        <div class="field"><label>Longueur (m)</label><input type="number" step="0.01" inputmode="decimal" value="${pc.lPlaf||0}" onchange="setF('lPlaf',+this.value)"></div>
+        <div class="field"><label>Largeur (m)</label><input type="number" step="0.01" inputmode="decimal" value="${pc.lPlaf2||0}" onchange="setF('lPlaf2',+this.value)"></div>
+      </div>`:``}
+      ${pc.plafondMode==='poly'?`
+      <div id="plaf-zones-list">${buildPlafZonesH(pc)}</div>
+      <button class="addbtn" onclick="addPlafZone('rect')" style="border-color:#b8c4f5;color:#3a5abf">+ Zone rectangle</button>
+      <button class="addbtn" style="margin-top:-6px;border-color:#b8c4f5;color:#3a5abf" onclick="addPlafZone('poly')">+ Zone polygone (tracé libre)</button>
+      <div id="plaf-canvas-wrap"></div>`:``}
+      ${pc.plafondMode==='parquet'?`
+      <div class="mbox" style="background:#e8eeff;border-color:#b8c4f5;color:#3a5abf">Surface plafond = surface parquet (${fmt(surfParquet(pc))}&nbsp;m²)</div>`:``}
+      `:''}
+      ${rt.s>0?`<div class="ssep"></div>
+      ${pc.paintMurs&&pc.paintPlafond?`
+      <div class="stat-r"><span class="stat-l">Surface murs</span><span class="stat-v">${fmt(Math.max(0,(pc.pmurs||[]).reduce((a,m)=>a+(+m.l||0)*(+pc.hMur||2.5),0)-(pc.pouv||[]).reduce((a,o)=>a+(+o.l||0)*(+o.h||0),0)))}<span class="stat-u">m²</span></span></div>
+      <div class="stat-r"><span class="stat-l">Surface plafond</span><span class="stat-v">${fmt(surfPlafond(pc))}<span class="stat-u">m²</span></span></div>
+      `:''}
+      <div class="stat-r hg"><span class="stat-l">Surface totale</span><span class="stat-v">${fmt(rt.s)}<span class="stat-u">m²</span></span></div>`:''}
+    </div>
+    <div class="card">
+      <div class="card-title">Peinture — pot</div>
+      <div class="fg">
+        <div class="field"><label>Volume pot (L)</label><select onchange="setF('volPot',+this.value)">
+          <option value="1" ${pc.volPot==1?'selected':''}>1 L</option>
+          <option value="2.5" ${pc.volPot==2.5?'selected':''}>2,5 L</option>
+          <option value="5" ${(+pc.volPot)==5?'selected':''}>5 L</option>
+          <option value="10" ${(!pc.volPot||pc.volPot==10)?'selected':''}>10 L</option>
+          <option value="15" ${pc.volPot==15?'selected':''}>15 L</option>
+        </select></div>
+        <div class="field"><label>Prix / pot (€)</label><input type="number" step="0.5" inputmode="decimal" value="${pc.prixPot||25}" onchange="setF('prixPot',+this.value)"></div>
+      </div>
+    </div>`;
+  }
+
+  html+=`<button class="btn btn-p btn-full" onclick="goScreen('s-res')">Voir les résultats →</button><div style="height:16px"></div>`;
+  el.innerHTML=html;
+  // restore poly canvas (active drawing)
+  const polyZ=(pc.zones||[]).find(z=>z.mode==='poly'&&z.drawing);
+  if(polyZ)initPolyCanvas(pc,polyZ);
+  // restore plafond canvas
+  if(pc.hasPeinture&&pc.paintPlafond&&pc.plafondMode==='poly'){
+    const plafZ=(pc.plafZones||[]).find(z=>z.mode==='poly'&&z.drawing);
+    if(plafZ)initPlafCanvas(pc,plafZ);
+  }
+  // draw all closed polygon thumbnails
+  requestAnimationFrame(()=>{drawAllMiniPolys(pc);drawAllMiniPlafPolys(pc);});
+}
+
+function drawAllMiniPolys(pc){
+  (pc.zones||[]).forEach((z,i)=>{
+    if(z.mode!=='poly'||!z.closed||!z.pts||z.pts.length<3) return;
+    const cv=document.getElementById('mini-poly-'+i);
+    if(!cv) return;
+    drawMiniPoly(cv, z);
+  });
+}
+
+function drawMiniPoly(cv, zone){
+  const W=cv.width, H=cv.height;
+  const ctx=cv.getContext('2d');
+  ctx.clearRect(0,0,W,H);
+  ctx.fillStyle='#f8f9fb'; ctx.fillRect(0,0,W,H);
+
+  const pts=zone.pts;
+  if(!pts||pts.length<2) return;
+
+  // Compute bounding box
+  const xs=pts.map(p=>p[0]), ys=pts.map(p=>p[1]);
+  const minX=Math.min(...xs), maxX=Math.max(...xs);
+  const minY=Math.min(...ys), maxY=Math.max(...ys);
+  const pw=maxX-minX||1, ph=maxY-minY||1;
+
+  const pad=16;
+  const sc=Math.min((W-pad*2)/pw, (H-pad*2)/ph);
+  const offX=pad+(W-pad*2-pw*sc)/2;
+  const offY=pad+(H-pad*2-ph*sc)/2;
+
+  const tx=p=>offX+(p[0]-minX)*sc;
+  const ty=p=>offY+(p[1]-minY)*sc;
+
+  // Light grid
+  ctx.strokeStyle='#e8ecf2'; ctx.lineWidth=0.5;
+  for(let x=0;x<W;x+=10){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,H);ctx.stroke();}
+  for(let y=0;y<H;y+=10){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(W,y);ctx.stroke();}
+
+  // Fill
+  ctx.beginPath();
+  pts.forEach((p,i)=>i===0?ctx.moveTo(tx(p),ty(p)):ctx.lineTo(tx(p),ty(p)));
+  ctx.closePath();
+  ctx.fillStyle='rgba(139,94,60,0.12)'; ctx.fill();
+
+  // Outline with all segments including closing
+  ctx.strokeStyle='#8b5e3c'; ctx.lineWidth=1.5;
+  ctx.beginPath();
+  pts.forEach((p,i)=>i===0?ctx.moveTo(tx(p),ty(p)):ctx.lineTo(tx(p),ty(p)));
+  ctx.closePath(); ctx.stroke();
+
+  // Segment lengths
+  const zscale=zone.scale||0.05;
+  pts.forEach((p,i)=>{
+    const n=pts[(i+1)%pts.length];
+    const mx=(tx(p)+tx(n))/2, my=(ty(p)+ty(n))/2;
+    const dx=(n[0]-p[0])*zscale, dy=(n[1]-p[1])*zscale;
+    const d=Math.sqrt(dx*dx+dy*dy);
+    if(d>0.1){
+      ctx.font='7px -apple-system,sans-serif';
+      const txt=fmt(d)+'m';
+      const tw=ctx.measureText(txt).width;
+      ctx.fillStyle='rgba(255,255,255,0.85)';
+      ctx.fillRect(mx-tw/2-2,my-8,tw+4,10);
+      ctx.fillStyle='#5a3a1a'; ctx.textAlign='center';
+      ctx.fillText(txt,mx,my);
+    }
+  });
+
+  // Points
+  pts.forEach((p,i)=>{
+    ctx.beginPath(); ctx.arc(tx(p),ty(p),3,0,Math.PI*2);
+    ctx.fillStyle='#8b5e3c'; ctx.fill();
+  });
+
+  // Area label centre
+  const cx=pts.reduce((a,p)=>a+tx(p),0)/pts.length;
+  const cy=pts.reduce((a,p)=>a+ty(p),0)/pts.length;
+  const sp=Math.abs(pts.reduce((a,p,i,ar)=>{const n=ar[(i+1)%ar.length];return a+(p[0]*n[1]-n[0]*p[1]);},0))/2*(zscale*zscale);
+  const areaT=fmt(sp)+' m²';
+  ctx.font='bold 9px -apple-system,sans-serif';
+  const aw=ctx.measureText(areaT).width;
+  ctx.fillStyle='rgba(139,94,60,0.85)';
+  ctx.beginPath(); roundRect(ctx,cx-aw/2-4,cy-8,aw+8,16,4); ctx.fill();
+  ctx.fillStyle='#fff'; ctx.textAlign='center';
+  ctx.fillText(areaT,cx,cy+4);
+}
+
+// ═══════════════════════════════════════════
+// RÉSULTATS — multi-module
+// ═══════════════════════════════════════════
+function renderRes(){
+  const pc=gpc();if(!pc){document.getElementById('res-content').innerHTML='';return;}
+  let html='';let total=0;
+  if(pc.hasC){
+    const r=calcCarrelage(pc),cC=r.sc*(+pc.prixC||25),cK=r.colle.nSacs*(+pc.prixK||18),cJ=r.joint.nSacs*(+pc.prixJ||8);
+    total+=cC+cK+cJ;
+    html+=`<div class="card" style="border-top:3px solid var(--teal)">
+      <div class="card-title" style="color:var(--teal)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="8" height="8" rx=".5"/><rect x="13" y="3" width="8" height="8" rx=".5"/><rect x="3" y="13" width="8" height="8" rx=".5"/><rect x="13" y="13" width="8" height="8" rx=".5"/></svg> Carrelage</div>
+      <div class="stat-r"><span class="stat-l">Surface nette</span><span class="stat-v">${fmt(r.s)}<span class="stat-u">m²</span></span></div>
+      <div class="stat-r"><span class="stat-l">Surface achat (+${pc.chute}%)</span><span class="stat-v">${fmt(r.sc)}<span class="stat-u">m²</span></span></div>
+      <div class="stat-r hg"><span class="stat-l">Paquets</span><span class="stat-v">${r.paq}</span></div>
+      <div class="stat-r hg"><span class="stat-l">Sacs colle (${r.colle.sk}kg)</span><span class="stat-v">${r.colle.nSacs}<span class="stat-u">sac(s)</span></span></div>
+      <div class="stat-r hg"><span class="stat-l">Sacs joint (${r.joint.sj}kg · ${r.joint.ep}mm${r.joint.auto?' auto':''})</span><span class="stat-v">${r.joint.nSacs}<span class="stat-u">sac(s)</span></span></div>
+      <div class="ssep"></div>
+      <div class="stat-r"><span class="stat-l">Carrelage</span><span class="stat-v">${fmt(cC)}<span class="stat-u">€</span></span></div>
+      <div class="stat-r"><span class="stat-l">Colle</span><span class="stat-v">${fmt(cK)}<span class="stat-u">€</span></span></div>
+      <div class="stat-r"><span class="stat-l">Joint</span><span class="stat-v">${fmt(cJ)}<span class="stat-u">€</span></span></div>
+    </div>`;
+  }
+  if(pc.hasP){
+    const rp=calcParquet(pc),cP=rp.surfAchat*(+pc.prixPar||35),cSC=pc.souscouche?rp.sacsSC*(+pc.prixSC||8):0;
+    total+=cP+cSC;
+    html+=`<div class="card" style="border-top:3px solid var(--wood)">
+      <div class="card-title" style="color:var(--wood)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--wood)" stroke-width="2" stroke-linecap="round"><rect x="2" y="7" width="20" height="3" rx=".5"/><rect x="2" y="12" width="20" height="3" rx=".5"/><rect x="2" y="17" width="20" height="3" rx=".5"/></svg> Parquet</div>
+      <div class="stat-r"><span class="stat-l">Surface nette</span><span class="stat-v">${fmt(rp.s)}<span class="stat-u">m²</span></span></div>
+      <div class="stat-r"><span class="stat-l">${rp.st.lbl} (+${rp.chute}%)</span><span class="stat-v">${fmt(rp.surfAchat)}<span class="stat-u">m²</span></span></div>
+      <div class="stat-r hg"><span class="stat-l">Paquets</span><span class="stat-v">${rp.paq}</span></div>
+      ${pc.souscouche?`<div class="stat-r"><span class="stat-l">Sous-couche</span><span class="stat-v">${rp.sacsSC}<span class="stat-u">rouleau(x)</span></span></div>`:''}
+      <div class="ssep"></div>
+      <div class="stat-r"><span class="stat-l">Parquet</span><span class="stat-v">${fmt(cP)}<span class="stat-u">€</span></span></div>
+      ${pc.souscouche?`<div class="stat-r"><span class="stat-l">Sous-couche</span><span class="stat-v">${fmt(cSC)}<span class="stat-u">€</span></span></div>`:''}
+    </div>`;
+  }
+  if(pc.hasT){
+    const rt=calcPeinture(pc),cT=rt.nPots*(+pc.prixPot||25);total+=cT;
+    const hasMursR = pc.paintMurs || (!pc.paintMurs && !pc.paintPlafond);
+    const sMurs=hasMursR?Math.max(0,(pc.pmurs||[]).reduce((a,m)=>a+(+m.l||0)*(+pc.hMur||2.5),0)-(pc.pouv||[]).reduce((a,o)=>a+(+o.l||0)*(+o.h||0),0)):0;
+    const sPlaf=pc.paintPlafond?surfPlafond(pc):0;
+    html+=`<div class="card" style="border-top:3px solid var(--paint)">
+      <div class="card-title" style="color:var(--paint)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--paint)" stroke-width="2" stroke-linecap="round"><path d="M18.5 3.5l2 2-14 14-3 1 1-3z"/><path d="M15 7l2 2"/></svg> Peinture</div>
+      ${sMurs>0?`<div class="stat-r"><span class="stat-l">Murs</span><span class="stat-v">${fmt(sMurs)}<span class="stat-u">m²</span></span></div>`:''}
+      ${sPlaf>0?`<div class="stat-r"><span class="stat-l">Plafond</span><span class="stat-v">${fmt(sPlaf)}<span class="stat-u">m²</span></span></div>`:''}
+      <div class="stat-r hg"><span class="stat-l">Total</span><span class="stat-v">${fmt(rt.s)}<span class="stat-u">m²</span></span></div>
+      <div class="stat-r"><span class="stat-l">${rt.type.lbl} · ${rt.passes} passe(s) · ${rt.rdt} m²/L</span><span class="stat-v">${parseFloat(rt.vol.toFixed(1))}<span class="stat-u">L</span></span></div>
+      <div class="stat-r hg"><span class="stat-l">Pots de ${rt.volPot} L</span><span class="stat-v">${rt.nPots}<span class="stat-u">pot(s)</span></span></div>
+      <div class="ssep"></div>
+      <div class="stat-r"><span class="stat-l">Peinture</span><span class="stat-v">${fmt(cT)}<span class="stat-u">€</span></span></div>
+    </div>`;
+  }
+  if(total>0)html+=`<div class="big"><div class="big-l">Total pièce</div><div class="big-v">${fmt(total)}<span class="big-u">€</span></div></div>`;
+  html+='<div style="height:16px"></div>';
+  document.getElementById('res-content').innerHTML=html||'<div class="empty">Activez un module pour voir les résultats.</div>';
+}
+
+// ═══════════════════════════════════════════
+// BILAN
+// ═══════════════════════════════════════════
+function gotoBilan(){renderBilan();goScreen('s-bilan');}
+function renderBilan(){
+  const p=cur();if(!p)return;
+  let tB=0;
+  const rows=p.pieces.map(pc=>{
+    const b=budgetPiece(pc);tB+=b;
+    const badges=[pc.hasC?'<span class="badge b-c">C</span>':'',pc.hasP?'<span class="badge b-p">P</span>':'',pc.hasT?'<span class="badge b-t">🖌</span>':''].filter(Boolean).join(' ');
+    return`<div style="display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1.5px solid var(--border)">
+      <div><div style="font-size:13px;font-weight:600;color:var(--navy)">${esc(pc.name)} ${badges}</div></div>
+      <div style="font-size:13px;font-weight:600;color:var(--red)">${fmt(b)} €</div>
+    </div>`;
+  }).join('');
+  document.getElementById('bilan-content').innerHTML=`
+    <div class="card">
+      <div class="card-title">Par pièce</div>
+      ${rows||'<div class="empty">Aucune pièce.</div>'}
+      ${tB>0?`<div class="big" style="margin-top:12px"><div class="big-l">Budget total matériaux</div><div class="big-v">${fmt(tB)}<span class="big-u">€</span></div></div>`:''}
+    </div><div style="height:16px"></div>`;
+}
+
+// ═══════════════════════════════════════════
+// SETTERS / HELPERS
+// ═══════════════════════════════════════════
+function setF(f,v){const pc=gpc();if(!pc)return;pc[f]=v;save();renderConfig();renderRes();renderPieceList();renderProjList();}
+function setPreset(p){const map={s:10,m:15,c:20};const pc=gpc();if(!pc)return;pc.chuteP=p;pc.chute=map[p];save();renderConfig();renderRes();}
+function toggleMod(f){const pc=gpc();if(!pc)return;pc[f]=!pc[f];save();renderConfig();renderRes();renderPieceList();renderProjList();}
+// carrelage murs/ouv
+function addM(){const pc=gpc();if(!pc)return;pc.murs.push({l:'',h:''});save();renderConfig();}
+function rmM(i){const pc=gpc();if(!pc)return;pc.murs.splice(i,1);save();renderConfig();renderRes();}
+function updM(i,f,v){const pc=gpc();if(!pc||!pc.murs[i])return;pc.murs[i][f]=v;save();renderConfig();renderRes();renderPieceList();renderProjList();}
+function addO(){const pc=gpc();if(!pc)return;if(!pc.ouv)pc.ouv=[];pc.ouv.push({nom:'',l:'',h:''});save();renderConfig();}
+function rmO(i){const pc=gpc();if(!pc)return;pc.ouv.splice(i,1);save();renderConfig();renderRes();}
+function updO(i,f,v){const pc=gpc();if(!pc||!pc.ouv[i])return;pc.ouv[i][f]=v;save();renderConfig();renderRes();}
+// parquet zones
+function addZ(mode){const pc=gpc();if(!pc)return;if(!pc.zones)pc.zones=[];
+  if(mode==='rect')pc.zones.push({id:uid(),mode:'rect',nom:'Zone '+(pc.zones.length+1),l:'',w:''});
+  else pc.zones.push({id:uid(),mode:'poly',nom:'Zone '+(pc.zones.length+1),pts:[],drawing:true});
+  save();renderConfig();
+  if(mode==='poly'){window._pScale=0.05;const z=pc.zones[pc.zones.length-1];initPolyCanvas(pc,z);}
+}
+function updZ(i,f,v){const pc=gpc();if(!pc||!pc.zones[i])return;pc.zones[i][f]=v;save();renderConfig();renderRes();}
+function rmZ(i){const pc=gpc();if(!pc)return;pc.zones.splice(i,1);save();renderConfig();renderRes();}
+function editPoly(i){const pc=gpc();if(!pc)return;const z=pc.zones[i];if(z.scale)window._pScale=z.scale;z.pts=[];z.drawing=true;z.closed=false;save();renderConfig();initPolyCanvas(pc,z);}
+// peinture murs/ouv
+function addPM(){const pc=gpc();if(!pc)return;if(!pc.pmurs)pc.pmurs=[];pc.pmurs.push({l:''});save();renderConfig();}
+function rmPM(i){const pc=gpc();if(!pc)return;pc.pmurs.splice(i,1);save();renderConfig();renderRes();}
+function updPM(i,f,v){const pc=gpc();if(!pc||!pc.pmurs[i])return;pc.pmurs[i][f]=v;save();renderConfig();renderRes();}
+function addPO(){const pc=gpc();if(!pc)return;if(!pc.pouv)pc.pouv=[];pc.pouv.push({nom:'',l:'',h:''});save();renderConfig();}
+function rmPO(i){const pc=gpc();if(!pc)return;pc.pouv.splice(i,1);save();renderConfig();renderRes();}
+function updPO(i,f,v){const pc=gpc();if(!pc||!pc.pouv[i])return;pc.pouv[i][f]=v;save();renderConfig();renderRes();}
+
+// ═══════════════════════════════════════════
+// POLYGONE CANVAS
+// ═══════════════════════════════════════════
+function initPolyCanvas(pc, zone) {
+  const wrap = document.getElementById('poly-canvas-wrap');
+  if (!wrap) return;
+
+  const W = Math.min(window.innerWidth - 48, 400), H = 280;
+  if (!window._pScale) window._pScale = 0.05; // 1px = 5cm → grid 20px = 1m
+
+  wrap.innerHTML = `<div class="cv-wrap">
+    <div class="cv-bar" style="flex-wrap:wrap;gap:6px">
+      <span id="poly-scale-lbl" style="font-size:10px;color:var(--text3)">1 carré = <span id="psl-val">${Math.round(20 * window._pScale * 100) / 100}</span> m</span>
+      <div style="display:flex;gap:4px">
+        <button class="btn btn-o btn-xs" style="padding:4px 10px;font-size:16px;line-height:1" onclick="scaleCanvas(1.5)">+</button>
+        <button class="btn btn-o btn-xs" style="padding:4px 10px;font-size:16px;line-height:1" onclick="scaleCanvas(0.67)">−</button>
+      </div>
+      <button class="btn btn-p btn-xs" onclick="forceClosePoly()">⬡ Fermer</button>
+      <button class="btn btn-o btn-xs" style="color:var(--text2);background:rgba(10,124,94,.08)" onclick="closePolyCanvas()">✓ Valider</button>
+      <button class="btn btn-o btn-xs" style="color:var(--text2)" onclick="undoPoly()">↩</button>
+    </div>
+    <canvas id="pcv" width="${W}" height="${H}" style="width:100%;cursor:crosshair;display:block;touch-action:none"></canvas>
+    <div id="poly-info" style="font-size:11px;color:var(--text3);text-align:center;padding:5px 8px;min-height:18px;background:var(--card2);border-top:1px solid var(--border)"></div>
+  </div>`;
+
+  window._pz = zone;
+  window._pc2 = pc;
+  window._pW = W;
+  window._pH = H;
+  window._pCursor = null; // live cursor position
+
+  const cv = document.getElementById('pcv');
+  drawPolyFull(cv, zone, null);
+
+  // Mouse
+  cv.addEventListener('click', onPolyClick);
+  cv.addEventListener('mousemove', onPolyMove);
+  cv.addEventListener('mouseleave', () => { window._pCursor = null; drawPolyFull(cv, window._pz, null); });
+
+  // Touch
+  cv.addEventListener('touchstart', onPolyTouch, {passive: false});
+  cv.addEventListener('touchmove',  onPolyTouchMove, {passive: false});
+
+  refreshPolyInfo(null);
+}
+
+function canvasXY(cv, clientX, clientY) {
+  const rect = cv.getBoundingClientRect();
+  const sx = cv.width / rect.width, sy = cv.height / rect.height;
+  return [Math.round((clientX - rect.left) * sx), Math.round((clientY - rect.top) * sy)];
+}
+
+function onPolyMove(e) {
+  const cv = e.currentTarget;
+  window._pCursor = canvasXY(cv, e.clientX, e.clientY);
+  drawPolyFull(cv, window._pz, window._pCursor);
+  refreshPolyInfo(window._pCursor);
+}
+
+function onPolyClick(e) {
+  const cv = e.currentTarget;
+  const pt = canvasXY(cv, e.clientX, e.clientY);
+  const zone = window._pz;
+  if (!zone.pts) zone.pts = [];
+  // Auto-close: if >= 3 pts and click near first point → close
+  if (zone.pts.length >= 3) {
+    const first = zone.pts[0];
+    const snapPx = 20; // pixels tolerance
+    if (Math.abs(pt[0]-first[0]) < snapPx && Math.abs(pt[1]-first[1]) < snapPx) {
+      lockPoly();
+      return;
+    }
+  }
+  zone.pts.push(pt);
+  save();
+  drawPolyFull(cv, zone, window._pCursor);
+  refreshPolyInfo(window._pCursor);
+}
+
+function onPolyTouch(e) {
+  e.preventDefault();
+  const t = e.changedTouches[0];
+  const cv = document.getElementById('pcv'); if (!cv) return;
+  const pt = canvasXY(cv, t.clientX, t.clientY);
+  const zone = window._pz;
+  if (!zone.pts) zone.pts = [];
+  // Auto-close on touch near first point
+  if (zone.pts.length >= 3) {
+    const first = zone.pts[0];
+    const snapPx = 28; // slightly larger for touch
+    if (Math.abs(pt[0]-first[0]) < snapPx && Math.abs(pt[1]-first[1]) < snapPx) {
+      lockPoly();
+      return;
+    }
+  }
+  zone.pts.push(pt);
+  save();
+  drawPolyFull(cv, zone, pt);
+  refreshPolyInfo(pt);
+}
+
+function onPolyTouchMove(e) {
+  e.preventDefault();
+  const t = e.changedTouches[0];
+  const cv = document.getElementById('pcv'); if (!cv) return;
+  const cur = canvasXY(cv, t.clientX, t.clientY);
+  window._pCursor = cur;
+  drawPolyFull(cv, window._pz, cur);
+  refreshPolyInfo(cur);
+}
+
+function scaleCanvas(factor) {
+  window._pScale = (window._pScale || 0.05) * factor;
+  const sl = document.getElementById('psl-val');
+  if (sl) sl.textContent = Math.round(20 * window._pScale * 100) / 100;
+  const cv = document.getElementById('pcv');
+  if (cv) drawPolyFull(cv, window._pz, window._pCursor);
+  refreshPolyInfo(window._pCursor);
+}
+
+function polyArea(zone) {
+  const pts = (zone && zone.pts) || [];
+  if (pts.length < 3) return 0;
+  const scale = window._pScale || 0.05;
+  const pxArea = Math.abs(pts.reduce((a, p, i, ar) => {
+    const n = ar[(i + 1) % ar.length];
+    return a + (p[0] * n[1] - n[0] * p[1]);
+  }, 0)) / 2;
+  return pxArea * scale * scale; // px² → m²
+}
+
+function dist2D(a, b, scale) {
+  const dx = (b[0] - a[0]) * scale, dy = (b[1] - a[1]) * scale;
+  return Math.sqrt(dx * dx + dy * dy);
+}
+
+function refreshPolyInfo(cursor) {
+  const zone = window._pz;
+  const info = document.getElementById('poly-info');
+  if (!info) return;
+  const scale = window._pScale || 0.05;
+  const pts = zone.pts || [];
+
+  if (!pts.length) { info.textContent = 'Tapez pour placer le premier coin de la pièce.'; return; }
+
+  let txt = pts.length + ' point(s)';
+
+  // live segment from last point to cursor
+  if (cursor && pts.length) {
+    const snapPx = 28;
+    const nearFirst = pts.length >= 3 &&
+      Math.abs(cursor[0]-pts[0][0]) < snapPx && Math.abs(cursor[1]-pts[0][1]) < snapPx;
+    if (nearFirst) {
+      txt += '  —  ✓ Cliquez pour fermer la forme';
+    } else {
+      const d = dist2D(pts[pts.length - 1], cursor, scale);
+      txt += '  —  prochain segment : ' + fmt(d) + ' m';
+    }
+  }
+
+  // area if closed-ish
+  if (pts.length > 2) {
+    txt += '  —  Surface : ' + fmt(polyArea(zone)) + ' m²';
+  }
+
+  info.textContent = txt;
+}
+
+function drawPolyFull(cv, zone, cursor) {
+  const ctx = cv.getContext('2d');
+  const W = cv.width, H = cv.height;
+  const scale = window._pScale || 0.05;
+  const grid = 20;
+  const pts = (zone && zone.pts) || [];
+
+  // ── Background ──
+  ctx.fillStyle = '#f8f9fb';
+  ctx.fillRect(0, 0, W, H);
+
+  // ── Minor grid ──
+  ctx.strokeStyle = '#e4e8f0'; ctx.lineWidth = 0.5;
+  for (let x = 0; x < W; x += grid) { ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, H); ctx.stroke(); }
+  for (let y = 0; y < H; y += grid) { ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(W, y); ctx.stroke(); }
+
+  // ── Major grid (every 5 cells) ──
+  ctx.strokeStyle = '#c8d0de'; ctx.lineWidth = 1;
+  for (let x = 0; x < W; x += grid * 5) { ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, H); ctx.stroke(); }
+  for (let y = 0; y < H; y += grid * 5) { ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(W, y); ctx.stroke(); }
+
+  // ── Axis labels ──
+  ctx.fillStyle = '#9bacc0'; ctx.font = '9px -apple-system,sans-serif'; ctx.textAlign = 'center';
+  for (let x = grid * 5; x < W; x += grid * 5) { ctx.fillText(fmt(x * scale) + 'm', x, 9); }
+  ctx.textAlign = 'right';
+  for (let y = grid * 5; y < H; y += grid * 5) { ctx.fillText(fmt(y * scale) + 'm', W - 2, y - 2); }
+
+  if (!pts.length && !cursor) return;
+
+  // ── Polygon fill ──
+  if (pts.length > 2) {
+    ctx.beginPath();
+    pts.forEach((p, i) => i === 0 ? ctx.moveTo(p[0], p[1]) : ctx.lineTo(p[0], p[1]));
+    ctx.closePath();
+    ctx.fillStyle = 'rgba(139,94,60,0.10)';
+    ctx.fill();
+  }
+
+  // ── Draw existing segments with length labels ──
+  const isClosedShape = zone && zone.closed;
+  const segCount = isClosedShape ? pts.length : pts.length - 1;
+  for (let i = 0; i < segCount; i++) {
+    const a = pts[i], b = pts[(i + 1) % pts.length];
+    drawSegment(ctx, a, b, scale, '#8b5e3c', 2, true);
+  }
+
+  // ── Live segment (last point → cursor) ──
+  if (cursor && pts.length) {
+    const last = pts[pts.length - 1];
+    drawSegment(ctx, last, cursor, scale, '#c0854a', 1.5, true, true);
+  }
+
+  // ── Points ──
+  pts.forEach((p, i) => {
+    const isFirst = i === 0;
+    const snapPx = 28;
+    const nearFirst = isFirst && cursor && pts.length >= 3 &&
+      Math.abs(cursor[0]-p[0]) < snapPx && Math.abs(cursor[1]-p[1]) < snapPx;
+    // Draw snap ring on first point if >= 3 pts
+    if (isFirst && pts.length >= 3) {
+      ctx.beginPath(); ctx.arc(p[0], p[1], 14, 0, Math.PI * 2);
+      ctx.strokeStyle = nearFirst ? '#0a7c5e' : 'rgba(139,94,60,0.3)';
+      ctx.lineWidth = nearFirst ? 2.5 : 1.5;
+      ctx.setLineDash(nearFirst ? [] : [4,3]);
+      ctx.stroke(); ctx.setLineDash([]);
+    }
+    // Point circle
+    ctx.beginPath(); ctx.arc(p[0], p[1], isFirst ? 7 : 5, 0, Math.PI * 2);
+    ctx.fillStyle = nearFirst ? '#0a7c5e' : '#8b5e3c'; ctx.fill();
+    ctx.fillStyle = '#fff'; ctx.font = 'bold 9px sans-serif'; ctx.textAlign = 'center';
+    ctx.fillText(i + 1, p[0], p[1] + 3);
+  });
+
+  // ── Closing segment hint ──
+  if (cursor && pts.length >= 3) {
+    const first = pts[0];
+    const snapPx = 28;
+    const nearFirst = Math.abs(cursor[0]-first[0]) < snapPx && Math.abs(cursor[1]-first[1]) < snapPx;
+    if (nearFirst) {
+      ctx.strokeStyle = '#0a7c5e'; ctx.lineWidth = 2; ctx.setLineDash([]);
+      ctx.beginPath(); ctx.moveTo(cursor[0], cursor[1]); ctx.lineTo(first[0], first[1]); ctx.stroke();
+    }
+  }
+
+  // ── Area label in centroid ──
+  if (pts.length > 2) {
+    const cx = pts.reduce((a, p) => a + p[0], 0) / pts.length;
+    const cy = pts.reduce((a, p) => a + p[1], 0) / pts.length;
+    const s = polyArea(zone);
+    const txt = fmt(s) + ' m²';
+    ctx.font = 'bold 12px -apple-system,sans-serif';
+    const tw = ctx.measureText(txt).width;
+    ctx.fillStyle = 'rgba(139,94,60,0.88)';
+    ctx.beginPath(); roundRect(ctx, cx - tw / 2 - 6, cy - 10, tw + 12, 20, 5); ctx.fill();
+    ctx.fillStyle = '#fff'; ctx.textAlign = 'center';
+    ctx.fillText(txt, cx, cy + 4);
+  }
+}
+
+function drawSegment(ctx, a, b, scale, color, lw, showLen, dashed) {
+  ctx.save();
+  ctx.strokeStyle = color; ctx.lineWidth = lw;
+  if (dashed) ctx.setLineDash([6, 3]); else ctx.setLineDash([]);
+  if (!dashed) ctx.setLineDash([]);
+  ctx.setLineDash(dashed ? [5, 4] : []);
+  ctx.beginPath(); ctx.moveTo(a[0], a[1]); ctx.lineTo(b[0], b[1]); ctx.stroke();
+  ctx.setLineDash([]);
+
+  if (showLen) {
+    const dx = (b[0] - a[0]) * scale, dy = (b[1] - a[1]) * scale;
+    const d = Math.sqrt(dx * dx + dy * dy);
+    if (d > 0.05) {
+      const mx = (a[0] + b[0]) / 2, my = (a[1] + b[1]) / 2;
+      const angle = Math.atan2(b[1] - a[1], b[0] - a[0]);
+      ctx.translate(mx, my);
+      ctx.rotate(angle);
+      const txt = fmt(d) + ' m';
+      ctx.font = 'bold 10px -apple-system,sans-serif';
+      const tw = ctx.measureText(txt).width;
+      ctx.fillStyle = 'rgba(255,255,255,0.9)';
+      ctx.fillRect(-tw / 2 - 3, -13, tw + 6, 13);
+      ctx.fillStyle = dashed ? '#c0854a' : '#5a3a1a';
+      ctx.textAlign = 'center';
+      ctx.fillText(txt, 0, -3);
+    }
+  }
+  ctx.restore();
+}
+
+function roundRect(ctx, x, y, w, h, r) {
+  ctx.beginPath();
+  ctx.moveTo(x + r, y);
+  ctx.lineTo(x + w - r, y); ctx.arcTo(x + w, y, x + w, y + r, r);
+  ctx.lineTo(x + w, y + h - r); ctx.arcTo(x + w, y + h, x + w - r, y + h, r);
+  ctx.lineTo(x + r, y + h); ctx.arcTo(x, y + h, x, y + h - r, r);
+  ctx.lineTo(x, y + r); ctx.arcTo(x, y, x + r, y, r);
+  ctx.closePath();
+}
+
+function undoPoly() {
+  const zone = window._pz;
+  if (!zone || !zone.pts || !zone.pts.length) return;
+  zone.pts.pop(); save();
+  const cv = document.getElementById('pcv');
+  if (cv) drawPolyFull(cv, zone, window._pCursor);
+  refreshPolyInfo(window._pCursor);
+}
+
+function forceClosePoly() {
+  const zone = window._pz;
+  if (!zone || !zone.pts || zone.pts.length < 3) return;
+  lockPoly();
+}
+
+function lockPoly() {
+  // Mark closed, stop interaction, keep canvas visible
+  const zone = window._pz;
+  if (zone) { zone.drawing = false; zone.closed = true; zone.scale = window._pScale || 0.05; }
+  window._pCursor = null;
+  const cv = document.getElementById('pcv');
+  if (cv) {
+    cv.removeEventListener('click', onPolyClick);
+    cv.removeEventListener('mousemove', onPolyMove);
+    cv.removeEventListener('touchstart', onPolyTouch);
+    cv.removeEventListener('touchmove', onPolyTouchMove);
+    cv.style.cursor = 'default';
+    drawPolyFull(cv, zone, null); // final redraw, no cursor
+  }
+  // Update toolbar to show locked state
+  const bar = document.querySelector('.cv-bar');
+  if (bar) bar.innerHTML = `
+    <span style="font-size:11px;color:var(--teal);font-weight:600">✓ Forme fermée — ${fmt(polyArea(zone))} m²</span>
+    <button class="btn btn-o btn-xs" style="color:var(--text2)" onclick="reopenPoly()">✏️ Modifier</button>
+    <button class="btn btn-p btn-xs" onclick="validatePoly()">✓ Enregistrer</button>`;
+  save();
+  renderRes(); renderPieceList(); renderProjList();
+  refreshPolyInfo(null);
+}
+
+function reopenPoly() {
+  const zone = window._pz;
+  if (zone) { zone.drawing = true; zone.closed = false; }
+  const pc = window._pc2;
+  save(); renderConfig();
+  // re-init canvas
+  if (zone) initPolyCanvas(pc, zone);
+}
+
+function validatePoly() {
+  const zone = window._pz;
+  if (zone) { zone.drawing = false; zone.closed = true; zone.scale = window._pScale || 0.05; }
+  window._pCursor = null;
+  save(); renderConfig(); // now close the canvas by rebuilding config
+}
+
+function closePolyCanvas() {
+  // Called from outside (e.g. editPoly reopen)
+  const cv = document.getElementById('pcv');
+  if (cv) {
+    cv.removeEventListener('click', onPolyClick);
+    cv.removeEventListener('mousemove', onPolyMove);
+    cv.removeEventListener('touchstart', onPolyTouch);
+    cv.removeEventListener('touchmove', onPolyTouchMove);
+  }
+  const zone = window._pz;
+  if (zone) { zone.drawing = false; zone.closed = true; }
+  window._pCursor = null;
+  save(); renderConfig();
+}
+
+// ─── PLAFOND ZONES ───────────────────────────────────
+function buildPlafZonesH(pc){
+  return (pc.plafZones||[]).map((z,i)=>{
+    if(z.mode==='rect') return`<div class="mrow">
+      <div class="mrow-top"><span class="mrow-lbl">${esc(z.nom||'Zone '+(i+1))}</span><span class="mrow-res" style="color:#3a5abf">${fmt((+z.l||0)*(+z.w||0))} m²</span></div>
+      <div class="mrow-in">
+        <div class="field"><label>Long. (m)</label><input type="number" step="0.01" inputmode="decimal" value="${z.l}" onchange="updPZ(${i},'l',this.value)"></div>
+        <div class="field"><label>Larg. (m)</label><input type="number" step="0.01" inputmode="decimal" value="${z.w}" onchange="updPZ(${i},'w',this.value)"></div>
+        <button class="btn btn-d btn-xs" onclick="rmPZ(${i})">✕</button>
+      </div></div>`;
+    const sc=z.scale||0.05;
+    const sp=z.pts&&z.pts.length>2?Math.abs(z.pts.reduce((a,p,i2,ar)=>{const n=ar[(i2+1)%ar.length];return a+(p[0]*n[1]-n[0]*p[1]);},0))/2*sc*sc:0;
+    if(z.closed&&!z.drawing) return`<div class="mrow">
+      <div class="mrow-top"><span class="mrow-lbl">${esc(z.nom||'Zone '+(i+1))}</span><span class="mrow-res" style="color:#3a5abf">${fmt(sp)} m²</span></div>
+      <canvas id="mini-plaf-${i}" width="240" height="120" style="display:block;width:100%;border-radius:8px;border:1px solid #b8c4f5;margin-bottom:8px;background:#f0f4ff"></canvas>
+      <div style="display:flex;gap:8px">
+        <button class="btn btn-o btn-xs" onclick="editPlafPoly(${i})" style="color:#3a5abf">✏️ Retracer</button>
+        <button class="btn btn-d btn-xs" onclick="rmPZ(${i})">✕</button>
+      </div></div>`;
+    return`<div class="mrow"><div class="mrow-top"><span class="mrow-lbl">${esc(z.nom||'Zone '+(i+1))} — en cours</span><span class="mrow-res" style="color:#3a5abf">${fmt(sp)} m²</span></div></div>`;
+  }).join('');
+}
+function addPlafZone(mode){
+  const pc=gpc();if(!pc)return;if(!pc.plafZones)pc.plafZones=[];
+  if(mode==='rect') pc.plafZones.push({id:uid(),mode:'rect',nom:'Zone '+(pc.plafZones.length+1),l:'',w:''});
+  else pc.plafZones.push({id:uid(),mode:'poly',nom:'Zone '+(pc.plafZones.length+1),pts:[],drawing:true});
+  save();renderConfig();
+  if(mode==='poly'){window._pScale=0.05;const z=pc.plafZones[pc.plafZones.length-1];initPlafCanvas(pc,z);}
+}
+function updPZ(i,f,v){const pc=gpc();if(!pc||!pc.plafZones[i])return;pc.plafZones[i][f]=v;save();renderConfig();renderRes();}
+function rmPZ(i){const pc=gpc();if(!pc)return;pc.plafZones.splice(i,1);save();renderConfig();renderRes();}
+function editPlafPoly(i){const pc=gpc();if(!pc)return;const z=pc.plafZones[i];if(z.scale)window._pScale=z.scale;z.pts=[];z.drawing=true;z.closed=false;save();renderConfig();initPlafCanvas(pc,z);}
+
+// ─── PLAFOND CANVAS (blue theme) ──────────────────────
+function initPlafCanvas(pc,zone){
+  const wrap=document.getElementById('plaf-canvas-wrap');if(!wrap)return;
+  const W=Math.min(window.innerWidth-48,400),H=260;
+  if(!window._pScale)window._pScale=0.05;
+  wrap.innerHTML=`<div class="cv-wrap" style="border-color:#b8c4f5">
+    <div class="cv-bar" style="flex-wrap:wrap;gap:6px;border-bottom-color:#b8c4f5">
+      <span id="plaf-scale-lbl" style="font-size:10px;color:#3a5abf">1 carré = <span id="psl2-val">${Math.round(20*window._pScale*100)/100}</span> m</span>
+      <div style="display:flex;gap:4px">
+        <button class="btn btn-o btn-xs" style="padding:4px 10px;font-size:16px" onclick="scalePlafCanvas(1.5)">+</button>
+        <button class="btn btn-o btn-xs" style="padding:4px 10px;font-size:16px" onclick="scalePlafCanvas(0.67)">−</button>
+      </div>
+      <button class="btn btn-xs" style="background:#3a5abf;color:#fff" onclick="lockPlafPoly()">⬡ Fermer</button>
+      <button class="btn btn-xs" style="background:#3a5abf;color:#fff" onclick="validatePlafPoly()">✓ Valider</button>
+      <button class="btn btn-o btn-xs" style="color:var(--text2)" onclick="undoPlaf()">↩</button>
+    </div>
+    <canvas id="plaf-cv" width="${W}" height="${H}" style="width:100%;cursor:crosshair;display:block;touch-action:none;background:#f0f4ff"></canvas>
+    <div id="plaf-info" style="font-size:11px;color:#3a5abf;text-align:center;padding:5px 8px;min-height:18px;background:#e8eeff;border-top:1px solid #b8c4f5"></div>
+  </div>`;
+  window._plz=zone;window._plpc=pc;window._plW=W;window._plH=H;window._plCursor=null;
+  const cv=document.getElementById('plaf-cv');
+  drawPlafFull(cv,zone,null);
+  cv.addEventListener('click',onPlafClick);
+  cv.addEventListener('mousemove',onPlafMove);
+  cv.addEventListener('mouseleave',()=>{window._plCursor=null;drawPlafFull(document.getElementById('plaf-cv'),window._plz,null);});
+  cv.addEventListener('touchstart',onPlafTouch,{passive:false});
+  cv.addEventListener('touchmove',onPlafTouchMove,{passive:false});
+  refreshPlafInfo(null);
+}
+function scalePlafCanvas(f){
+  window._pScale=(window._pScale||0.05)*f;
+  const sl=document.getElementById('psl2-val');if(sl)sl.textContent=Math.round(20*window._pScale*100)/100;
+  const cv=document.getElementById('plaf-cv');if(cv)drawPlafFull(cv,window._plz,window._plCursor);
+  refreshPlafInfo(window._plCursor);
+}
+function onPlafMove(e){const cv=e.currentTarget;window._plCursor=canvasXY(cv,e.clientX,e.clientY);drawPlafFull(cv,window._plz,window._plCursor);refreshPlafInfo(window._plCursor);}
+function onPlafClick(e){
+  const cv=e.currentTarget;const pt=canvasXY(cv,e.clientX,e.clientY);const zone=window._plz;
+  if(!zone.pts)zone.pts=[];
+  if(zone.pts.length>=3){const f=zone.pts[0];if(Math.abs(pt[0]-f[0])<28&&Math.abs(pt[1]-f[1])<28){lockPlafPoly();return;}}
+  zone.pts.push(pt);save();drawPlafFull(cv,zone,window._plCursor);refreshPlafInfo(window._plCursor);
+}
+function onPlafTouch(e){
+  e.preventDefault();const t=e.changedTouches[0];const cv=document.getElementById('plaf-cv');if(!cv)return;
+  const pt=canvasXY(cv,t.clientX,t.clientY);const zone=window._plz;if(!zone.pts)zone.pts=[];
+  if(zone.pts.length>=3){const f=zone.pts[0];if(Math.abs(pt[0]-f[0])<28&&Math.abs(pt[1]-f[1])<28){lockPlafPoly();return;}}
+  zone.pts.push(pt);save();drawPlafFull(cv,zone,pt);refreshPlafInfo(pt);
+}
+function onPlafTouchMove(e){e.preventDefault();const t=e.changedTouches[0];const cv=document.getElementById('plaf-cv');if(!cv)return;const cur=canvasXY(cv,t.clientX,t.clientY);window._plCursor=cur;drawPlafFull(cv,window._plz,cur);refreshPlafInfo(cur);}
+function undoPlaf(){const z=window._plz;if(!z||!z.pts||!z.pts.length)return;z.pts.pop();save();const cv=document.getElementById('plaf-cv');if(cv)drawPlafFull(cv,z,window._plCursor);refreshPlafInfo(window._plCursor);}
+function lockPlafPoly(){
+  const zone=window._plz;if(!zone||!zone.pts||zone.pts.length<3)return;
+  zone.drawing=false;zone.closed=true;zone.scale=window._pScale||0.05;window._plCursor=null;
+  const cv=document.getElementById('plaf-cv');
+  if(cv){cv.removeEventListener('click',onPlafClick);cv.removeEventListener('mousemove',onPlafMove);cv.removeEventListener('touchstart',onPlafTouch);cv.removeEventListener('touchmove',onPlafTouchMove);cv.style.cursor='default';drawPlafFull(cv,zone,null);}
+  const bar=document.querySelector('#plaf-canvas-wrap .cv-bar');
+  if(bar)bar.innerHTML=`<span style="font-size:11px;color:#3a5abf;font-weight:600">✓ Plafond fermé — ${fmt(plafArea(zone))} m²</span>
+    <button class="btn btn-o btn-xs" onclick="reopenPlafPoly()">✏️ Modifier</button>
+    <button class="btn btn-xs" style="background:#3a5abf;color:#fff" onclick="validatePlafPoly()">✓ Enregistrer</button>`;
+  save();renderRes();renderPieceList();renderProjList();refreshPlafInfo(null);
+}
+function reopenPlafPoly(){const zone=window._plz;if(zone){zone.drawing=true;zone.closed=false;}save();renderConfig();if(zone)initPlafCanvas(window._plpc,zone);}
+function validatePlafPoly(){const zone=window._plz;if(zone){zone.drawing=false;zone.closed=true;zone.scale=window._pScale||0.05;}window._plCursor=null;save();renderConfig();}
+function plafArea(zone){
+  const pts=(zone&&zone.pts)||[];if(pts.length<3)return 0;
+  const scale=window._pScale||0.05;
+  return Math.abs(pts.reduce((a,p,i,ar)=>{const n=ar[(i+1)%ar.length];return a+(p[0]*n[1]-n[0]*p[1]);},0))/2*scale*scale;
+}
+function refreshPlafInfo(cursor){
+  const zone=window._plz;const info=document.getElementById('plaf-info');if(!info)return;
+  const scale=window._pScale||0.05;const pts=zone&&zone.pts||[];
+  if(!pts.length){info.textContent='Tapez pour placer le premier coin du plafond.';return;}
+  let txt=pts.length+' point(s)';
+  if(cursor&&pts.length){const near=pts.length>=3&&Math.abs(cursor[0]-pts[0][0])<28&&Math.abs(cursor[1]-pts[0][1])<28;if(near)txt+='  — ✓ Cliquez pour fermer';else{const dx=(cursor[0]-pts[pts.length-1][0])*scale,dy=(cursor[1]-pts[pts.length-1][1])*scale;txt+='  — '+fmt(Math.sqrt(dx*dx+dy*dy))+' m';}}
+  if(pts.length>2)txt+='  — Surface : '+fmt(plafArea(zone))+' m²';
+  info.textContent=txt;
+}
+function drawPlafFull(cv,zone,cursor){
+  const ctx=cv.getContext('2d');const W=cv.width,H=cv.height;
+  const scale=window._pScale||0.05;const grid=20;const pts=(zone&&zone.pts)||[];
+  ctx.fillStyle='#f0f4ff';ctx.fillRect(0,0,W,H);
+  ctx.strokeStyle='#d8e0f8';ctx.lineWidth=0.5;
+  for(let x=0;x<W;x+=grid){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,H);ctx.stroke();}
+  for(let y=0;y<H;y+=grid){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(W,y);ctx.stroke();}
+  ctx.strokeStyle='#b8c4f0';ctx.lineWidth=1;
+  for(let x=0;x<W;x+=grid*5){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,H);ctx.stroke();}
+  for(let y=0;y<H;y+=grid*5){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(W,y);ctx.stroke();}
+  ctx.fillStyle='#9bacc0';ctx.font='9px -apple-system,sans-serif';ctx.textAlign='center';
+  for(let x=grid*5;x<W;x+=grid*5)ctx.fillText(fmt(x*scale)+'m',x,9);
+  ctx.textAlign='right';for(let y=grid*5;y<H;y+=grid*5)ctx.fillText(fmt(y*scale)+'m',W-2,y-2);
+  if(!pts.length&&!cursor)return;
+  if(pts.length>2){ctx.beginPath();pts.forEach((p,i)=>i===0?ctx.moveTo(p[0],p[1]):ctx.lineTo(p[0],p[1]));ctx.closePath();ctx.fillStyle='rgba(58,90,191,0.10)';ctx.fill();}
+  // Segments
+  const isClosed=zone&&zone.closed;const segCount=isClosed?pts.length:pts.length-1;
+  for(let i=0;i<segCount;i++){
+    const a=pts[i],b=pts[(i+1)%pts.length];
+    drawPlafSeg(ctx,a,b,scale,'#3a5abf',2,true);
+  }
+  if(cursor&&pts.length&&!isClosed) drawPlafSeg(ctx,pts[pts.length-1],cursor,scale,'#7090e0',1.5,true,true);
+  // Points
+  pts.forEach((p,i)=>{
+    const isFirst=i===0;const snapNear=isFirst&&cursor&&pts.length>=3&&Math.abs(cursor[0]-p[0])<28&&Math.abs(cursor[1]-p[1])<28;
+    if(isFirst&&pts.length>=3){ctx.beginPath();ctx.arc(p[0],p[1],14,0,Math.PI*2);ctx.strokeStyle=snapNear?'#3a5abf':'rgba(58,90,191,0.3)';ctx.lineWidth=snapNear?2.5:1.5;ctx.setLineDash(snapNear?[]:[4,3]);ctx.stroke();ctx.setLineDash([]);}
+    ctx.beginPath();ctx.arc(p[0],p[1],isFirst?7:5,0,Math.PI*2);ctx.fillStyle=snapNear?'#2040a0':'#3a5abf';ctx.fill();
+    ctx.fillStyle='#fff';ctx.font='bold 9px sans-serif';ctx.textAlign='center';ctx.fillText(i+1,p[0],p[1]+3);
+  });
+  // Area centroid
+  if(pts.length>2){
+    const cx=pts.reduce((a,p)=>a+p[0],0)/pts.length,cy=pts.reduce((a,p)=>a+p[1],0)/pts.length;
+    const s=plafArea(zone)||Math.abs(pts.reduce((a,p,i,ar)=>{const n=ar[(i+1)%ar.length];return a+(p[0]*n[1]-n[0]*p[1]);},0))/2*scale*scale;
+    const txt=fmt(s)+' m²';ctx.font='bold 12px -apple-system,sans-serif';const tw=ctx.measureText(txt).width;
+    ctx.fillStyle='rgba(58,90,191,0.88)';ctx.beginPath();roundRect(ctx,cx-tw/2-6,cy-10,tw+12,20,5);ctx.fill();
+    ctx.fillStyle='#fff';ctx.textAlign='center';ctx.fillText(txt,cx,cy+4);
+  }
+}
+function drawPlafSeg(ctx,a,b,scale,color,lw,showLen,dashed){
+  ctx.save();ctx.strokeStyle=color;ctx.lineWidth=lw;ctx.setLineDash(dashed?[5,4]:[]);
+  ctx.beginPath();ctx.moveTo(a[0],a[1]);ctx.lineTo(b[0],b[1]);ctx.stroke();ctx.setLineDash([]);
+  if(showLen){const dx=(b[0]-a[0])*scale,dy=(b[1]-a[1])*scale,d=Math.sqrt(dx*dx+dy*dy);
+    if(d>0.05){const mx=(a[0]+b[0])/2,my=(a[1]+b[1])/2,angle=Math.atan2(b[1]-a[1],b[0]-a[0]);
+      ctx.translate(mx,my);ctx.rotate(angle);const txt=fmt(d)+' m';ctx.font='bold 10px -apple-system,sans-serif';const tw=ctx.measureText(txt).width;
+      ctx.fillStyle='rgba(255,255,255,0.9)';ctx.fillRect(-tw/2-3,-13,tw+6,13);ctx.fillStyle=dashed?'#7090e0':'#2040a0';ctx.textAlign='center';ctx.fillText(txt,0,-3);}
+  }ctx.restore();
+}
+// Mini thumbnail for closed plafond zones
+function drawAllMiniPlafPolys(pc){
+  (pc.plafZones||[]).forEach((z,i)=>{
+    if(z.mode!=='poly'||!z.closed||!z.pts||z.pts.length<3)return;
+    const cv=document.getElementById('mini-plaf-'+i);if(!cv)return;
+    drawMiniPlafPoly(cv,z);
+  });
+}
+function drawMiniPlafPoly(cv,zone){
+  const W=cv.width,H=cv.height;const ctx=cv.getContext('2d');const pts=zone.pts;
+  ctx.fillStyle='#f0f4ff';ctx.fillRect(0,0,W,H);
+  if(!pts||pts.length<2)return;
+  const xs=pts.map(p=>p[0]),ys=pts.map(p=>p[1]);
+  const minX=Math.min(...xs),maxX=Math.max(...xs),minY=Math.min(...ys),maxY=Math.max(...ys);
+  const pw=maxX-minX||1,ph=maxY-minY||1,pad=14;
+  const sc=Math.min((W-pad*2)/pw,(H-pad*2)/ph);
+  const offX=pad+(W-pad*2-pw*sc)/2,offY=pad+(H-pad*2-ph*sc)/2;
+  const tx=p=>offX+(p[0]-minX)*sc,ty=p=>offY+(p[1]-minY)*sc;
+  ctx.strokeStyle='#d8e0f8';ctx.lineWidth=0.5;
+  for(let x=0;x<W;x+=10){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,H);ctx.stroke();}
+  for(let y=0;y<H;y+=10){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(W,y);ctx.stroke();}
+  ctx.beginPath();pts.forEach((p,i)=>i===0?ctx.moveTo(tx(p),ty(p)):ctx.lineTo(tx(p),ty(p)));
+  ctx.closePath();ctx.fillStyle='rgba(58,90,191,0.10)';ctx.fill();
+  ctx.strokeStyle='#3a5abf';ctx.lineWidth=1.5;
+  ctx.beginPath();pts.forEach((p,i)=>i===0?ctx.moveTo(tx(p),ty(p)):ctx.lineTo(tx(p),ty(p)));
+  ctx.closePath();ctx.stroke();
+  const zscale=zone.scale||0.05;
+  pts.forEach((p,i)=>{const n=pts[(i+1)%pts.length];const mx=(tx(p)+tx(n))/2,my=(ty(p)+ty(n))/2;
+    const dx=(n[0]-p[0])*zscale,dy=(n[1]-p[1])*zscale,d=Math.sqrt(dx*dx+dy*dy);
+    if(d>0.1){ctx.font='7px -apple-system,sans-serif';const t=fmt(d)+'m';const tw=ctx.measureText(t).width;
+      ctx.fillStyle='rgba(255,255,255,0.85)';ctx.fillRect(mx-tw/2-2,my-8,tw+4,10);ctx.fillStyle='#2040a0';ctx.textAlign='center';ctx.fillText(t,mx,my);}
+  });
+  pts.forEach(p=>{ctx.beginPath();ctx.arc(tx(p),ty(p),3,0,Math.PI*2);ctx.fillStyle='#3a5abf';ctx.fill();});
+  const cx=pts.reduce((a,p)=>a+tx(p),0)/pts.length,cy=pts.reduce((a,p)=>a+ty(p),0)/pts.length;
+  const sp=Math.abs(pts.reduce((a,p,i,ar)=>{const n=ar[(i+1)%ar.length];return a+(p[0]*n[1]-n[0]*p[1]);},0))/2*(zscale*zscale);
+  const at=fmt(sp)+' m²';ctx.font='bold 9px -apple-system,sans-serif';const aw=ctx.measureText(at).width;
+  ctx.fillStyle='rgba(58,90,191,0.85)';ctx.beginPath();roundRect(ctx,cx-aw/2-4,cy-8,aw+8,16,4);ctx.fill();
+  ctx.fillStyle='#fff';ctx.textAlign='center';ctx.fillText(at,cx,cy+4);
+}
+
+// ═══════════════════════════════════════════
+// MODAL / IMPORT / EXPORT
+// ═══════════════════════════════════════════
+function openModal(){
+  const p=cur();
+  document.getElementById('modal-pname').textContent=p?'Projet : '+p.name:'Aucun projet ouvert';
+  document.getElementById('exp-sec').style.display=p?'block':'none';
+  document.getElementById('imp-fb').innerHTML='';
+  document.getElementById('modal').style.display='flex';
+}
+function closeModal(e){if(!e||e.target===document.getElementById('modal'))document.getElementById('modal').style.display='none';}
+function handleFile(file){
+  if(!file)return;const fb=document.getElementById('imp-fb');
+  if(!file.name.endsWith('.json')){fb.innerHTML='<div class="imp-err">Fichier invalide.</div>';return;}
+  const r=new FileReader();
+  r.onload=e=>{try{
+    const p=JSON.parse(e.target.result);
+    if(!p.name||!Array.isArray(p.pieces))throw new Error();
+    const ex=S.projects.find(x=>x.id===p.id);
+    if(ex){if(!confirm('Remplacer "'+p.name+'" ?'))return;S.projects[S.projects.indexOf(ex)]=p;}
+    else{p.id=p.id||uid();S.projects.push(p);}
+    save();renderProjList();
+    fb.innerHTML=`<div class="imp-ok"><div class="imp-ok-i"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div><div style="font-size:13px;font-weight:600;color:var(--teal)">${esc(p.name)}</div></div>`;
+  }catch(err){fb.innerHTML='<div class="imp-err">Format non reconnu.</div>';}};
+  r.readAsText(file);
+}
+function exportJSON(){const p=cur();if(!p)return;dl(p.name.replace(/\s+/g,'_')+'.json',JSON.stringify(p,null,2),'application/json');closeModal();}
+function exportCSV(){
+  const p=cur();if(!p)return;
+  const rows=[['Pièce','Module','Surface (m²)','Budget (€)']];
+  p.pieces.forEach(pc=>{
+    if(pc.hasC){const r=calcCarrelage(pc);const b=r.sc*(+pc.prixC||25)+r.colle.nSacs*(+pc.prixK||18)+r.joint.nSacs*(+pc.prixJ||8);rows.push([pc.name,'Carrelage',fmt(r.s),fmt(b)]);}
+    if(pc.hasP){const r=calcParquet(pc);const b=r.surfAchat*(+pc.prixPar||35)+(pc.souscouche?r.sacsSC*(+pc.prixSC||8):0);rows.push([pc.name,'Parquet',fmt(r.s),fmt(b)]);}
+    if(pc.hasT){const r=calcPeinture(pc);rows.push([pc.name,'Peinture',fmt(r.s),fmt(r.nPots*(+pc.prixPot||25))]);}
+  });
+  dl(p.name.replace(/\s+/g,'_')+'.csv','\uFEFF'+rows.map(r=>r.map(c=>'"'+String(c).replace(/"/g,'""')+'"').join(';')).join('\n'),'text/csv;charset=utf-8');closeModal();
+}
+function exportTXT(){
+  const p=cur();if(!p)return;
+  let txt=`CARRELAGEPRO — ${p.name}\nDate: ${new Date().toLocaleDateString('fr-FR')}\n\n`;
+  let tB=0;
+  p.pieces.forEach((pc,i)=>{
+    const b=budgetPiece(pc);tB+=b;
+    txt+=`--- PIÈCE ${i+1}: ${pc.name} ---\n`;
+    if(pc.hasC){const r=calcCarrelage(pc);txt+=`  Carrelage: ${fmt(r.s)} m² nette · ${r.paq} paquets · ${r.colle.nSacs} sac(s) colle · ${r.joint.nSacs} sac(s) joint\n`;}
+    if(pc.hasP){const r=calcParquet(pc);txt+=`  Parquet (${r.st.lbl}): ${fmt(r.s)} m² nette · ${r.paq} paquets\n`;}
+    if(pc.hasT){const r=calcPeinture(pc);txt+=`  Peinture (${r.type.lbl}): ${fmt(r.s)} m² · ${r.passes} passe(s) · ${r.nPots} pot(s)\n`;}
+    txt+=`  Budget: ${fmt(b)} €\n\n`;
+  });
+  txt+=`=== TOTAL: ${fmt(tB)} € ===\n`;
+  dl(p.name.replace(/\s+/g,'_')+'.txt',txt,'text/plain;charset=utf-8');closeModal();
+}
+</script>
+</body>
+</html>
